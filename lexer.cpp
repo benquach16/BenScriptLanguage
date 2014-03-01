@@ -111,7 +111,7 @@ void Lexer::FirstPass()
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
 					//cout << ") detected.\n";
-					if(j != tokens.size()-2 )
+					if(j != tokens.size()-1 )
 					{
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
 						//exit(1);
@@ -206,8 +206,8 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 	}
 	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
-		
 		//make sure we have the proper var types
+		Function func;
 		if(funcName == vectorOfFunctions[i].name && 
 			 vectorOfFunctions[i].functionArguments.size() == arguments.size())
 		{
@@ -221,12 +221,11 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 				}
 				else
 				{
-	
+					
 					Variable ret;
 					ret.data = 0;			
 					//save the program counter temporarily
 					int prevCurrentLine = currentLine;
-	
 					GoThroughFunction(vectorOfFunctions[i]);
 					//reset
 					currentLine = prevCurrentLine;
@@ -240,8 +239,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 				ret.data = 0;			
 				//save the program counter temporarily
 				int prevCurrentLine = currentLine;
-	
-				//GoThroughFunction(func);
+				GoThroughFunction(vectorOfFunctions[0]);
 				//reset
 				currentLine = prevCurrentLine;
 				return ret;
@@ -257,10 +255,12 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 void Lexer::GoThroughFunction(Function func)
 {
 	//loop while there is a tab
-	currentLine = func.fileLine;
+	currentLine = func.fileLine+1;
+
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
+		tokens[0].erase(0,1);
 		doLine(tokens);
 		currentLine++;
 	}

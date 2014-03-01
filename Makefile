@@ -3,7 +3,7 @@ GCC=g++
 default: lexer main
 
 main: lexer
-	$(GCC) testmain.cpp lexer.o -o Interpreter
+	$(GCC) main.cpp lexer.o -o Interpreter.exe
 
 lexer:
 	$(GCC) -c lexer.cpp -o lexer.o
