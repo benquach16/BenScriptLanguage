@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// checks assignment operators
 int Lexer::findOperator1(vector <string> tokens)
 {
   int parens = 0;
@@ -15,6 +14,8 @@ int Lexer::findOperator1(vector <string> tokens)
 
     else if(tokens.at(i) == ")")
       parens--;
+
+    //cerr << "parens: " << parens << endl;
 
     if(parens == 0 && tokens.at(i) == "+=" || tokens.at(i) == "?" ||
        tokens.at(i) == "-=" || tokens.at(i) == "*=" || tokens.at(i) == "/=" ||
@@ -148,18 +149,26 @@ Variable Lexer::split(int index, vector<string> tokens)
   {
     leftTokens.push_back(tokens[n]);
   }
-  for(unsigned n = tokens.size(); n > index; n--)
+  for(unsigned n = tokens.size()-1; n > index; n--)
   {
     rightTokens.push_back(tokens[n]);
   }
-  
+  //cerr << "doing lefft" << endl;
   doLine(leftTokens);
+  //cerr << "did left works" << endl;
   doLine(rightTokens);
+  for(int i = 0; i  < leftTokens.size(); i++)
+    cout << leftTokens.at(i) << " ";
+  
+  for(int i = 0; i < rightTokens.size(); i++)
+    cout << rightTokens.at(i) << " ";
+
   return operatorSelect(leftTokens, rightTokens, tokens[index]);
 }
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
+  //cerr << "start" << endl;
   if(tokens.size() > 1)
   {
     // shave outer parens
@@ -173,9 +182,9 @@ Variable Lexer::doLine(vector<string> &tokens)
     
     // checks all assignment operators
     mid = findOperator1(tokens);
+    //cerr << mid << endl;
     if(mid != -1)
       return split(mid, tokens);
-    
     // checks or
     mid = findOperator2(tokens);
     if(mid != -1)
@@ -197,6 +206,11 @@ Variable Lexer::doLine(vector<string> &tokens)
       return split(mid, tokens);
     
     // checks add or subtract
+    for(unsigned i = 0; i < tokens.size(); i++)
+    {
+      cerr << tokens[i];
+    }
+    cerr << endl;
     mid = findOperator6(tokens);
     if(mid != -1)
       return split(mid, tokens);
@@ -206,22 +220,21 @@ Variable Lexer::doLine(vector<string> &tokens)
     if(mid != -1)
       return split(mid, tokens);
 		
-		//check if its a function
-		if(tokens.size() > 3)
-		{
-			//we assume function call
-			if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
-			{
-				//proper function call
-			}
-			else
-			{
-				cerr << "Function call syntax error at line " << currentLine << endl;
-				exit(1);
-			}
-		}
-  }
-	else
-		return;
+    //check if its a function
+    if(tokens.size() > 3)
+    {
+      //we assume function call
+      if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
+      {
+	//proper function call
+      }
 
+      else
+      {
+	cerr << "Function call syntax error at line " << currentLine << endl;
+	exit(1);
+      }
+    }
+  }
+  //cerr << "end";
 }

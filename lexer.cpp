@@ -213,14 +213,14 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 	//cout << "Commas: " << (commas.size()-1) << endl;
 	if(commas.size()>=1 && tokens.size() > leftParens+1)
 	{
-		cout << "First Arg." << endl;
+	  //cout << "First Arg." << endl;
 		for(int i = leftParens+1; i<commas[0]; i++)
 		{
 			convertTokens.push_back(tokens[i]);
 			//cout << tokens[i] << endl;
 		}
 		//cout << endl;
-		//args.push_back(doLine(convertTokens));
+		args.push_back(doLine(convertTokens));
 		convertTokens.clear();
 	}
 	for(int i = 1; i<commas.size(); i++)
@@ -232,7 +232,7 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 			//cout << tokens[j] << endl;
 		}
 		//cout << endl;
-		//args.push_back(doLine(convertTokens));
+		args.push_back(doLine(convertTokens));
 		convertTokens.clear();
 	}
 	return doFunction(tokens[leftParens-1], args);
@@ -343,4 +343,244 @@ vector<string> Lexer::TokenizeLine(const string &str)
     tokens.push_back(curToken);
 
   return tokens;
+}
+
+int Lexer::findOperator1(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    //cerr << "parens: " << parens << endl;
+
+    if(parens == 0 && (tokens.at(i) == "+=" || tokens.at(i) == "?" ||
+		       tokens.at(i) == "-=" || tokens.at(i) == "*=" || tokens.at(i) == "/=" ||
+		       tokens.at(i) == "=" || tokens.at(i) == "%="))
+      return i;
+  }
+  return -1;
+}
+
+// checks or
+int Lexer::findOperator2(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && tokens.at(i) == "||")
+      return i;
+  }
+  return -1;
+}
+
+// checks and
+int Lexer::findOperator3(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && tokens.at(i) == "&&")
+      return i;
+  }
+  return -1;
+}
+
+// checks equality comparison
+int Lexer::findOperator4(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && (tokens.at(i) == "==" || tokens.at(i) == "!="))
+      return i;
+  }
+  return -1;
+}
+
+// checks less than or greater than comparisons
+int Lexer::findOperator5(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
+      tokens.at(i) == "<" || tokens.at(i) == ">")
+      return i;
+  }
+  return -1;
+}
+
+// checks add and subtract
+int Lexer::findOperator6(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && (tokens.at(i) == "+" || tokens.at(i) == "-"))
+      return i;
+  }
+  return -1;
+}
+
+// checks multiply and divide
+int Lexer::findOperator7(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && (tokens.at(i) == "*" || tokens.at(i) == "/"))
+      return i;
+  }
+  return -1;
+}
+
+// selects operation and executes left and right
+Variable Lexer::operatorSelect(vector<string> left, vector<string> right, string op)
+{
+  Variable a;
+  return a;
+}
+
+// recursively separates tokens into operators
+Variable Lexer::split(int index, vector<string> tokens)
+{
+  vector<string> leftTokens;
+  vector<string> rightTokens;
+  //allocate to these vectors
+  for(int i = 0; i < index; i++)
+    leftTokens.push_back(tokens.at(i));
+
+  for(int i = index+1; i < tokens.size(); i++)
+    rightTokens.push_back(tokens.at(i));
+
+  for(int i = 0; i < leftTokens.size(); i++)
+    cout << leftTokens.at(i) << " ";
+  cout << endl;
+  
+  for(int i = 0; i < rightTokens.size(); i++)
+  cout << rightTokens.at(i) << " ";
+  cout << endl;
+
+  doLine(leftTokens);
+  doLine(rightTokens);
+
+  return operatorSelect(leftTokens, rightTokens, tokens[index]);
+}
+
+Variable Lexer::doLine(vector<string> &tokens)
+{
+  //cerr << "start" << endl;
+  if(tokens.size() > 1)
+  {
+    // shave outer parens
+    if(tokens.at(0) == "(" && tokens.at(tokens.size()-1) == ")" )
+    {
+      tokens.pop_back();
+      tokens.erase(tokens.begin());
+    }
+    
+    int mid;
+    
+    // checks all assignment operators
+    mid = findOperator1(tokens);
+    
+    // checks or
+    if(mid == -1)
+      mid = findOperator2(tokens);
+
+    // checks and
+    if(mid == -1)
+      mid = findOperator3(tokens);
+
+    // checks equality comparison
+    if(mid == -1)
+      mid = findOperator4(tokens);
+
+    // checks less than greater than comparison
+    if(mid == -1)
+      mid = findOperator5(tokens);
+    
+    // checks add and subtract
+    if(mid == -1)
+      mid = findOperator6(tokens);
+
+    // checks multiply and divide
+    if(mid == -1)
+      mid = findOperator7(tokens);
+
+    cout << "mid: " << mid << endl;
+    if(mid != -1)
+      return split(mid, tokens);
+    
+    //check if its a function
+    if(tokens.size() > 3)
+    {
+      //we assume function call
+      if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
+      {
+	//proper function call
+	SetupFunction(1, tokens);
+      }
+
+      else
+      {
+	cerr << "Function call syntax error at line " << currentLine << endl;
+	exit(1);
+      }
+    }
+  }
+  else
+  {
+    //find the variable type that this is
+    cerr << "lets do it to it" << endl;
+    Variable ret;
+
+    ret.type = STRING;
+    
+    char* t = new char[5];
+    t = "test";
+    ret.data = t;
+    return ret;
+  }
 }
