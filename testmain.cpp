@@ -12,8 +12,8 @@ int main(int argc, char **argv)
 		interpreter.ReadFile(argv[i]);
         interpreter.FirstPass();
         cout << interpreter.vectorOfFunctions.size() << endl;
-        cout << interpreter.variables.size() << endl;
-        cout << interpreter.vectorOfFunctions.size() << endl;
+        //cout << interpreter.vectorOfFunctions[0].functionArguments.size() << endl;
+
 	}
 	return 0;
 }

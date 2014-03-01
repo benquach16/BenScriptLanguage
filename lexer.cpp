@@ -55,7 +55,6 @@ int Lexer::GetMatchingParens(unsigned leftParens, vector<string> &tokens)
 
 void Lexer::FirstPass()
 {
-	cout
 	for(int i = 0; i < fileLines.size(); i++ )
 	{
 		//Ignore all lines that begin with whitespace or are commented
