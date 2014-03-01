@@ -86,4 +86,3 @@ Variable Lexer::AddOp(Variable &left, Variable &right)
 	
 	return var;
 }
-
