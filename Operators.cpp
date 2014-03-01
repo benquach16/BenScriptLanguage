@@ -86,3 +86,76 @@ Variable Lexer::AddOp(Variable &left, Variable &right)
 	
 	return var;
 }
+
+bool Lexer::GreaterThanOp(Variable &left, Variable &right)
+{
+	// String
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(char *)left.data > *(char *)right.data;
+
+	// INT
+	if (left.VariableTypes.INT && right.VariableTypes.INT)
+		return (*(int *)left.data > *(int *)right.data;
+
+	// FLOAT
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(float *)left.data > *(float *)right.data;
+
+	cerr << "Function: GreatertThabnOp. Line Number: " << numemberLine << "Not right type to compare" << endl; 
+	exit(1);
+}
+
+bool Lexer::LessThanOp(Variable &left, Variable &right)
+{
+	// String
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(char *)left.data < *(char *)right.data;
+
+	// INT
+	if (left.VariableTypes.INT && right.VariableTypes.INT)
+		return (*(int *)left.data < *(int *)right.data;
+
+	// FLOAT
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(float *)left.data < *(float *)right.data;
+
+	cerr << "Function: LessThanOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
+	exit(1);
+}
+
+bool Lexer::LessOrEqualThanOp(Variable &left, Variable &right)
+{
+	// String
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(char *)left.data <= *(char *)right.data;
+
+	// INT
+	if (left.VariableTypes.INT && right.VariableTypes.INT)
+		return (*(int *)left.data <= *(int *)right.data;
+
+	// FLOAT
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(float *)left.data <= *(float *)right.data;
+
+	cerr << "Function: LessThanOrEqualOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
+	exit(1);
+}
+
+bool Lexer::GreaterOrEqualThanOp(Variable &left, Variable &right)
+{
+	// String
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(char *)left.data >= *(char *)right.data;
+
+	// INT
+	if (left.VariableTypes.INT && right.VariableTypes.INT)
+		return (*(int *)left.data >= *(int *)right.data;
+
+	// FLOAT
+	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+		return (*(float *)left.data >= *(float *)right.data;
+
+	cerr << "Function: GreaterThanOrEqualOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
+	exit(1);
+}
+
