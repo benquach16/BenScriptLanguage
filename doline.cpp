@@ -92,7 +92,7 @@ int Lexer::findOperator5(vector <string> tokens)
       parens--;
 
     if(parens == 0 && tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
-      tokens.at(i) == "<" || tokens.at(i) == ">")
+			 tokens.at(i) == "<" || tokens.at(i) == ">")
       return i;
   }
   return -1;
@@ -226,13 +226,13 @@ Variable Lexer::doLine(vector<string> &tokens)
       //we assume function call
       if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
       {
-	//proper function call
+				//proper function call
       }
 
       else
       {
-	cerr << "Function call syntax error at line " << currentLine << endl;
-	exit(1);
+				cerr << "Function call syntax error at line " << currentLine << endl;
+				exit(1);
       }
     }
   }

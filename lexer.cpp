@@ -179,10 +179,91 @@ void Lexer::FirstPass()
 	}
 }
 
-Variable Lexer::doFunction(string fnName, vector<Variable> &arguments)
+Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 {
-	Variable var;
-	return var;
+	//set return value to null
+	if(funcName == "print")
+	{
+		for (unsigned i = 0; i < arguments.size(); i++)
+		{
+			if(arguments[i].type == INT)
+			{
+				cout << (*(int*)arguments[i].data) << endl;
+			}
+			else if(arguments[i].type == STRING)
+			{
+				cout << (char*)arguments[i].data << endl;
+			}
+			else if(arguments[i].type == FLOAT)
+			{
+				cout << (float*)arguments[i].data << endl;
+			}
+			else
+			{
+				cout << (bool*)arguments[i].data << endl;
+			}
+		}
+	}
+	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
+	{
+		
+		//make sure we have the proper var types
+		if(funcName == vectorOfFunctions[i].name && 
+			 vectorOfFunctions[i].functionArguments.size() == arguments.size())
+		{
+			bool loopBroken = false;
+			for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
+			{
+				if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
+				{
+					loopBroken = true;
+					break;
+				}
+				else
+				{
+	
+					Variable ret;
+					ret.data = 0;			
+					//save the program counter temporarily
+					int prevCurrentLine = currentLine;
+	
+					GoThroughFunction(vectorOfFunctions[i]);
+					//reset
+					currentLine = prevCurrentLine;
+					return ret;				
+				}
+			}
+			if(!loopBroken)
+			{
+	
+				Variable ret;
+				ret.data = 0;			
+				//save the program counter temporarily
+				int prevCurrentLine = currentLine;
+	
+				//GoThroughFunction(func);
+				//reset
+				currentLine = prevCurrentLine;
+				return ret;
+			}
+			
+		}
+	}
+	cerr << "No function call found for " << funcName << endl;
+	exit(1);
+	
+}
+
+void Lexer::GoThroughFunction(Function func)
+{
+	//loop while there is a tab
+	currentLine = func.fileLine;
+	while(fileLines[currentLine][0] == '\t')
+	{
+		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
+		doLine(tokens);
+		currentLine++;
+	}
 }
 
 Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
@@ -573,14 +654,12 @@ Variable Lexer::doLine(vector<string> &tokens)
   else
   {
     //find the variable type that this is
-    cerr << "lets do it to it" << endl;
+    //cerr << "lets do it to it" << endl;
     Variable ret;
 
     ret.type = STRING;
     
-    char* t = new char[5];
-    t = "test";
-    ret.data = t;
+    ret.data = (void*)tokens[0].c_str();
     return ret;
   }
 }

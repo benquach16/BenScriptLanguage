@@ -72,8 +72,8 @@ public:
 	int findOperator5(vector<string> tokens);
 	int findOperator6(vector<string> tokens);
 	int findOperator7(vector<string> tokens);
-	Variable doFunction(string fnName, vector<Variable> &arguments);
-
+	Variable doFunction(string funcName, vector<Variable> &arguments);
+	void GoThroughFunction(Function func);
  	void ChangeFunction(unsigned vectorIndex);
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	Variable SetupFunction(unsigned leftParens, vector<string> &tokens);
