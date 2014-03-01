@@ -205,5 +205,23 @@ Variable Lexer::doLine(vector<string> &tokens)
     mid = findOperator7(tokens);
     if(mid != -1)
       return split(mid, tokens);
+		
+		//check if its a function
+		if(tokens.size() > 3)
+		{
+			//we assume function call
+			if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
+			{
+				//proper function call
+			}
+			else
+			{
+				cerr << "Function call syntax error at line " << currentLine << endl;
+				exit(1);
+			}
+		}
   }
+	else
+		return;
+
 }
