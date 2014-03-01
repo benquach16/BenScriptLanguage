@@ -1,30 +1,21 @@
 #include <iostream>
 #include <vector>
+#include <istream>
+#include <fstream>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
-struct Function
-{
-	string name;
-	unsigned fileLine;
-	vector<Variable> functionArguments;
-};
 
 enum VariableTypes
 {
-	int,
-	float,
-	bool,
-	string
+	INT,
+	FLOAT,
+	BOOL,
+	STRING
 };
 
-struct Variable
-{
-	string name;
-	VariableTypes type;
-	void* data;
-};
 
 enum OperatorTypes
 {
@@ -42,6 +33,22 @@ enum OperatorTypes
 	GREATERTHAN,
 	LESSTHAN
 };
+
+struct Variable
+{
+	string name;
+	VariableTypes type;
+	void* data;
+};
+
+
+struct Function
+{
+	string name;
+	unsigned fileLine;
+	vector<Variable> functionArguments;
+};
+
 
 
 //lexer class code
