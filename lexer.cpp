@@ -12,7 +12,26 @@ Lexer::~Lexer()
 //Helper Functions
 bool Lexer::MakeVarIfVar( int &i, vector<string> &fileLines)
 {
-    //switch(fileLines)
+    string firstToken = fileLines[i].substr(0,fileLines[i].find(' '));
+    vector<string> tokens = TokenizeLine(fileLines[i]);
+    Variable var;
+    var.name = tokens[1];
+    
+    if ( firstToken == "int" )
+        var.type = INT;
+    else if (firstToken == "bool")
+        var.type = BOOL;
+    else if (firstToken == "float")
+        var.type = FLOAT;
+    else if (firstToken == "string")
+        var.type = STRING;
+    else
+        return false;  
+    
+    tokens.erase(tokens.begin());
+    //doLine(tokens);
+    variables.push_back(var);
+    return true;
 }
 
 //DYLANS FUNCTION
@@ -144,16 +163,8 @@ void Lexer::FirstPass()
 				}
 			}
 		}
-		else if(fileLines[i].substr(0,3) == "int")
-		{
-			//~ vector<string> tokens = TokenizeLine(fileLines[i]);
-			//~ Variable var;
-			//~ var.name = tokens[1];
-			//~ var.type = INT;
-			//~ tokens.erase
-			//~ doLine(tokens.)
-			//~ variables.push_back
-		}
+		
+        MakeVarIfVar( i , fileLines);
 	}
 }
 
