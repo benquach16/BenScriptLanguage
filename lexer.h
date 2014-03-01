@@ -61,7 +61,18 @@ public:
 	void ReadFile(char *filePath);
 
 	vector<string> TokenizeLine(const string &str);
-	void DoLine(const vector<string> &line);
+
+	Variable doLine(vector<string> &tokens);
+	Variable split(int index, vector<string> tokens);
+	Variable operatorSelect(vector<string> left, vector<string> right, string op);
+	int findOperator1(vector<string> tokens);
+	int findOperator2(vector<string> tokens);
+	int findOperator3(vector<string> tokens);
+	int findOperator4(vector<string> tokens);
+	int findOperator5(vector<string> tokens);
+	int findOperator6(vector<string> tokens);
+	int findOperator7(vector<string> tokens);
+
  	void ChangeFunction(unsigned vectorIndex);
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	vector<int> SetupFunction(unsigned leftParens, vector<string> &tokens);
