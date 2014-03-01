@@ -11,8 +11,10 @@ int main(int argc, char **argv)
 		Lexer interpreter;
 		interpreter.ReadFile(argv[i]);
         interpreter.FirstPass();
-        cout << interpreter.vectorOfFunctions.size() << endl;
-        //cout << interpreter.vectorOfFunctions[0].functionArguments.size() << endl;
+        //cout << interpreter.vectorOfFunctions[0].fileLine << endl;
+        for(int i=0; i < interpreter.vectorOfFunctions.size();i++)
+            //for(int j=0; j < interpreter.vectorOfFunctions[i].functionArguments.size(); j++)
+                cout << interpreter.vectorOfFunctions[i].functionArguments.size() << endl;
 
 	}
 	return 0;

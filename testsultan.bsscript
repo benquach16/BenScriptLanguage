@@ -5,8 +5,14 @@ function foo()
 function hi( int b )
     int hey = 7
     
-function wassup( int one, int two, int three )
+function wassup( int one, int two, int three, int four )
     int lalala = 9
 
 function main()
     int omgaaaa = 0
+
+ int a
+ string b
+ bool c
+ double d
+ 
