@@ -76,7 +76,7 @@ public:
  	void ChangeFunction(unsigned vectorIndex);
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	vector<int> SetupFunction(unsigned leftParens, vector<string> &tokens);
-	bool MakeVarIfVar( int &i, vector<string> &fileLines);
+	bool MakeVarIfVar( vector<string> &tokens);
 
 	unsigned currentLine;
 	//important stacks

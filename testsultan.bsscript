@@ -11,8 +11,8 @@ function wassup( int one, int two, int three, int four )
 function main()
     int omgaaaa = 0
 
- int a
- string b
- bool c
- double d
+int a
+string b
+bool c
+double d
  
