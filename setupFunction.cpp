@@ -18,14 +18,7 @@ void Lexer::SetupFunction(int leftParen, vector<string> &tokens)
 		else if (tokens[i][0] == ',' && leftParensCount == 0) //If it's the last comma 
 			commas.push_back(i);	// Add that shit
 		else
-			cerr << "ERROR at line: " << currentLine << " Found in Function: setupFunction. You are missing at least one right parenthesis" << endl;
-	
-		
-		
-	
-	
-		
-	
+			cerr << "ERROR at line: " << currentLine << " Found in Function: setupFunction. You are missing at least one right parenthesis" << endl;	
 	
 }
 
