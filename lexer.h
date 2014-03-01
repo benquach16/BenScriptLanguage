@@ -63,7 +63,7 @@ public:
 	vector<string> TokenizeLine(const string &str);
 	void DoLine(vector<string> &line);
  	void ChangeFunction(unsigned vectorIndex);
-	void GetMatchingParens(unsigned leftParens, vector<string> &tokens);
+  int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	void SetupFunction(unsigned leftParens, vector<string> &tokens);
 	
 protected:
