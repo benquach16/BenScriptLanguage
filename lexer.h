@@ -72,10 +72,11 @@ public:
 	int findOperator5(vector<string> tokens);
 	int findOperator6(vector<string> tokens);
 	int findOperator7(vector<string> tokens);
+	Variable doFunction(string fnName, vector<Variable> &arguments);
 
  	void ChangeFunction(unsigned vectorIndex);
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
-	vector<int> SetupFunction(unsigned leftParens, vector<string> &tokens);
+	Variable SetupFunction(unsigned leftParens, vector<string> &tokens);
 	bool MakeVarIfVar( vector<string> &tokens);
 
 	unsigned currentLine;

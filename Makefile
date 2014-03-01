@@ -10,5 +10,3 @@ lexer:
 
 clean:
 	rm -rf *.o Interpreter
-
-

@@ -111,14 +111,16 @@ void Lexer::FirstPass()
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
 					//cout << ") detected.\n";
-					if(j != tokens.size()-1 )
+					if(j != tokens.size()-2 )
 					{
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
-						exit(1);
+						//exit(1);
 					}
                     
                     if(varTypeAssigned && nameAssigned)// if both are true, then variable has been created
-                        newFunc.functionArguments.push_back(arg);
+                    {
+                    	newFunc.functionArguments.push_back(arg);
+                    }
                         
 					vectorOfFunctions.push_back(newFunc);
                     
@@ -168,39 +170,72 @@ void Lexer::FirstPass()
         else
         {
             // << "GVAR";
-            vector<string> tokens = TokenizeLine(fileLines[i]);
+            //vector<string> tokens = TokenizeLine(fileLines[i]);
             //cout << tokens[1] << endl;
-            MakeVarIfVar(tokens);
+            //MakeVarIfVar(tokens);
             //cout << fileLines[i] << endl;
         }
         //cout << endl;
 	}
 }
 
-vector<int> Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
+Variable Lexer::doFunction(string fnName, vector<Variable> &arguments)
+{
+	Variable var;
+	return var;
+}
+
+Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 {
 	int leftParensCount = 0;
 	vector<int> commas;						//Stores indexes of commas and last )
 
-	for (int i = leftParens; i < tokens.size(); i++)
+	for (int i = leftParens+1; i < tokens.size(); i++)
 	{
 		if (tokens[i] == "(")				// If a left parenthesis is found
 			leftParensCount++;				// increment 
 		else if (tokens[i] == ")")			// otherwise if a right parenthesis is found
 		{
-			if(!leftParensCount)		// check if this should be the last right parens
+			if(leftParensCount==0)		// check if this should be the last right parens
 			{
 				commas.push_back(i);	// and add index to commas vector
-				return commas;
+				//cout << "Added comma." << endl;
 			}
 			else
 				leftParensCount--;			// otherwise it's not last right parens and decrement
 		}
 		else if (tokens[i][0] == ',' && leftParensCount == 0) //If it's the last comma 
 			commas.push_back(i);	// Add that shit
-		else
-			cerr << "ERROR at line: " << currentLine << " Found in Function: setupFunction. You are missing at least one right parenthesis" << endl;	
 	}
+	
+	vector<Variable> args;
+	vector<string> convertTokens;
+	//cout << "Commas: " << (commas.size()-1) << endl;
+	if(commas.size()>=1 && tokens.size() > leftParens+1)
+	{
+		cout << "First Arg." << endl;
+		for(int i = leftParens+1; i<commas[0]; i++)
+		{
+			convertTokens.push_back(tokens[i]);
+			//cout << tokens[i] << endl;
+		}
+		//cout << endl;
+		//args.push_back(doLine(convertTokens));
+		convertTokens.clear();
+	}
+	for(int i = 1; i<commas.size(); i++)
+	{
+		cout << "Arg"<< (i+1) <<": ";
+		for(int j = commas[i-1] + 1; j<commas[i]; j++)
+		{
+			convertTokens.push_back(tokens[j]);
+			//cout << tokens[j] << endl;
+		}
+		//cout << endl;
+		//args.push_back(doLine(convertTokens));
+		convertTokens.clear();
+	}
+	return doFunction(tokens[leftParens-1], args);
 }
 
 
@@ -212,77 +247,100 @@ vector<string> Lexer::TokenizeLine(const string &str)
 
   string curToken;
 
+  bool quote = false;
+
   // traverse line end if get to end or hit comment
   while(i != str.size() && str[i] != '#')
+  {
+    //if hit function operators push them back
+    if(str[i] == '(' || str[i] == ')' || 
+       str[i] == ',' || str[i] == '?' || str[i] == ':')
+    {
+      if(curToken.size() > 0)
+      {
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+
+      tokens.push_back(str.substr(i,1));
+    }
+
+    // if hit math operators push them back
+    else if(str[i] == '=' || str[i] == '+' || str[i] == '-' ||
+	    str[i] == '/' || str[i] == '*' || str[i] == '>' ||
+	    str[i] == '<')
+    {
+      if(curToken.size() > 0)
+      {
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+
+      // if += ++ etc
+      if(str.size() > i + 1 && (str[i+1] == '=') || (str[i+1] == '+') ||
+	 (str[i+1] == '-') && str[i] == str[i+1])
+      {
+	tokens.push_back(str.substr(i,2));
+	i++;
+      }
+
+      else
+	tokens.push_back(str.substr(i,1));
+    }
+
+    // if or and
+    else if((str[i] == '|' || str[i] == '&')  && (str.size() > i+1 && str[i+1] == str[i]))
+    {
+      if(curToken.size() > 0)
+      {
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+
+      tokens.push_back(str.substr(i,2));
+      i++;
+    }
+
+    else if(str[i] == '\"')
+    {
+      if(quote && curToken.size() > 0 && str[i-1] != '\\')
+      {
+	curToken+= str[i];
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+
+      if(!quote)
+      {
+	curToken+= str[i];
+	if(!quote && str[i-1] == '\\')
 	{
-		//if hit function operators push them back
-		if(str[i] == '(' || str[i] == ')' || 
-			 str[i] == ',' || str[i] == '?' || str[i] == ':')
-		{
-			if(curToken.size() > 0)
-	    {
-	      tokens.push_back(curToken);
-	      curToken = "";
-	    }
-
-			tokens.push_back(str.substr(i,1));
-		}
-
-		// if hit math operators push them back
-		else if(str[i] == '=' || str[i] == '+' || str[i] == '-' ||
-						str[i] == '/' || str[i] == '*' || str[i] == '>' ||
-						str[i] == '<')
-		{
-			if(curToken.size() > 0)
-	    {
-	      tokens.push_back(curToken);
-	      curToken = "";
-	    }
-
-			// if += ++ etc
-			if(str.size() < i + 1 && (str[i+1] == '=') || (str[i+1] == '+') ||
-				 (str[i+1] == '-') && str[i] == str[i+1])
-	    {
-	      tokens.push_back(str.substr(i,2));
-	      i++;
-	    }
-
-			else
-				tokens.push_back(str.substr(i,1));
-		}
-
-		// if or and
-		else if((str[i] == '|' || str[i] == '&')  && (str.size() > i+1 && str[i+1] == str[i]))
-		{
-			if(curToken.size() > 0)
-	    {
-	      tokens.push_back(curToken);
-	      curToken = "";
-	    }
-
-			tokens.push_back(str.substr(i,2));
-			i++;
-		}
-
-		// if hit space reset curToken
-		else if(str[i] == ' ')
-		{
-			if(curToken.size() > 0)
-	    {
-	      tokens.push_back(curToken);
-	      curToken = "";
-	    }
-		}
-      
-		// if nothing add it to curToken
-		else
-			curToken += str[i];
-
-		i++;
+	  cerr << "escaped \" outside of string literal" << endl;
+	  exit(1);
 	}
+	quote = true;
+      }
+    }
+
+    // if hit space reset curToken
+    else if(str[i] == ' ' && !quote)
+    {
+      if(curToken.size() > 0)
+      {
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+    }
+      
+    // if nothing add it to curToken
+    else
+      curToken += str[i];
+
+    i++;
+  }
 
   if(curToken.size() > 0)
     tokens.push_back(curToken);
 
-	return tokens;
+  return tokens;
 }
