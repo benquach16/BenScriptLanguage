@@ -14,5 +14,5 @@ void Lexer::GetMatchingParens(unsigned leftParens, vector<string> &tokens)
 		}
 			
 	}
-	cerr << "ERROR at line: " << currentLine << " You are missing at least one right parenthesis" << endl;
+	cerr << "ERROR at line: " << currentLine << " Found in function: getMatchingParens. You are missing at least one right parenthesis" << endl;
 }
