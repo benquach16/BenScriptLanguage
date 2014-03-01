@@ -6,7 +6,7 @@
 // bool + string = "true" + concatonate 
 // bool + int add 1 if true
 
-Variable Lexer::AddOp(Variable left, Variable right)
+Variable Lexer::OpPlus(Variable left, Variable right)
 {
 	Variable var; 
 
@@ -87,7 +87,7 @@ Variable Lexer::AddOp(Variable left, Variable right)
 	return var;
 }
 
-bool Lexer::GreaterThanOp(Variable left, Variable right)
+bool Lexer::OpGreat(Variable left, Variable right)
 {
 	// String
 	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
@@ -105,7 +105,7 @@ bool Lexer::GreaterThanOp(Variable left, Variable right)
 	exit(1);
 }
 
-bool Lexer::LessThanOp(Variable left, Variable right)
+bool Lexer::OpLess(Variable left, Variable right)
 {
 	// String
 	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
@@ -123,7 +123,7 @@ bool Lexer::LessThanOp(Variable left, Variable right)
 	exit(1);
 }
 
-bool Lexer::LessOrEqualThanOp(Variable left, Variable right)
+bool Lexer::OpLessEqual(Variable left, Variable right)
 {
 	// String
 	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
@@ -141,7 +141,7 @@ bool Lexer::LessOrEqualThanOp(Variable left, Variable right)
 	exit(1);
 }
 
-bool Lexer::GreaterOrEqualThanOp(Variable left, Variable right)
+bool Lexer::OpGreatEqual(Variable left, Variable right)
 {
 	// String
 	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
