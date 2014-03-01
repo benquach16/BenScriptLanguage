@@ -112,7 +112,12 @@ void Lexer::FirstPass()
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
 					//cout << ") detected.\n";
-					if(j != tokens.size()-2 )
+					for(int q = 0; q < tokens.size(); q++)
+					{
+						cout << "\"" << tokens[q] << "\"\n";
+					}
+					
+					if(j != tokens.size()-1 )
 					{
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
 						//exit(1);
@@ -341,8 +346,8 @@ vector<string> Lexer::TokenizeLine(const string &str)
     {
       if(curToken.size() > 0)
       {
-	tokens.push_back(curToken);
-	curToken = "";
+    	  tokens.push_back(curToken);
+    	  curToken = "";
       }
 
       tokens.push_back(str.substr(i,1));
@@ -422,9 +427,10 @@ vector<string> Lexer::TokenizeLine(const string &str)
     i++;
   }
 
-  if(curToken.size() > 0)
+  if(!curToken.empty())
     tokens.push_back(curToken);
-
+  if((int)(tokens[tokens.size()-1][0]) == 13)
+	  tokens.pop_back();
   return tokens;
 }
 
@@ -443,7 +449,7 @@ int Lexer::findOperator1(vector <string> tokens)
 
     if(parens == 0 && (tokens.at(i) == "+=" || tokens.at(i) == "?" ||
 		       tokens.at(i) == "-=" || tokens.at(i) == "*=" || tokens.at(i) == "/=" ||
-		       tokens.at(i) == "=" || tokens.at(i) == "%="))
+		       tokens.at(i) == "=" ))
       return i;
   }
   return -1;
@@ -552,17 +558,113 @@ int Lexer::findOperator7(vector <string> tokens)
     else if(tokens.at(i) == ")")
       parens--;
 
-    if(parens == 0 && (tokens.at(i) == "*" || tokens.at(i) == "/"))
+    if(parens == 0 && (tokens.at(i) == "*" || tokens.at(i) == "/" || tokens.at(i) == "%" ))
+      return i;
+  }
+  return -1;
+}
+// checks unary operators
+int Lexer::findOperator8(vector <string> tokens)
+{
+  int parens = 0;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+    if(tokens.at(i) == "(")
+      parens++;
+
+    else if(tokens.at(i) == ")")
+      parens--;
+
+    if(parens == 0 && (tokens.at(i) == "++" || tokens.at(i) == "--" || tokens.at(i) == "!"))
       return i;
   }
   return -1;
 }
 
 // selects operation and executes left and right
-Variable Lexer::operatorSelect(vector<string> left, vector<string> right, string op)
+Variable Lexer::operatorSelect(Variable left, Variable right, string op)
 {
-  Variable a;
-  return a;
+  /*switch(op)
+  {
+  case "=":
+    return UpdateValue(left.name, right);
+    break;
+
+  case "+=":
+    return UpdateValue(left.name, OpPlus(left, right));
+    break;
+    
+  case "-=":
+    return UpdateValue(left.name, OpMinus(left, right));
+    break;
+
+  case "*=":
+    return UpdateValue(left.name, OpMultiply(left, right));
+    break;
+
+  case "/=":
+    return UpdateValue(left.name, OpDivide(left, right));
+    break;
+
+  case "%=":
+    return UpdateValue(left.name, OpMod(left, right));
+    break;
+
+  case "||":
+    return OpOr(left, right);
+    break;
+
+  case "&&":
+    return OpAnd(left, right);
+    break;
+
+  case "==":
+    return OpCompare(left, right);
+    break;
+
+  case "!=":
+    return OpInvCompare(left, right);
+    break;
+
+  case "<=":
+    return OpLessEqual(left, right);
+    break;
+
+  case ">=":
+    return OpGreatEqual(left, right);
+    break;
+
+  case "<":
+    return OpGreat(left, right);
+    break;
+
+  case ">":
+    return OpLess(left, right);
+    break;
+
+  case "+":
+    return OpPlus(left, right);
+    break;
+
+  case "-":
+    return OpMinus(left, right);
+    break;
+
+  case "*":
+    return OpMultiply(left, right);
+    break;
+
+  case "/":
+    return OpDivide(left, right);
+    break;
+
+  case "%":
+    return OpMod(left, right);
+    break;
+
+  }*/
+	Variable var;
+	return var;
 }
 
 // recursively separates tokens into operators
@@ -585,10 +687,10 @@ Variable Lexer::split(int index, vector<string> tokens)
   cout << rightTokens.at(i) << " ";
   cout << endl;
 
-  doLine(leftTokens);
-  doLine(rightTokens);
+  Variable left = doLine(leftTokens);
+  Variable right = doLine(rightTokens);
 
-  return operatorSelect(leftTokens, rightTokens, tokens[index]);
+  return operatorSelect(left, right, tokens[index]);
 }
 
 Variable Lexer::doLine(vector<string> &tokens)
@@ -631,7 +733,10 @@ Variable Lexer::doLine(vector<string> &tokens)
     // checks multiply and divide
     if(mid == -1)
       mid = findOperator7(tokens);
-
+    
+    if(mid == -1)
+      mid = findOperator8(tokens);
+    
     if(mid != -1)
       return split(mid, tokens);
     

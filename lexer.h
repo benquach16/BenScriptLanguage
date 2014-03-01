@@ -64,7 +64,7 @@ public:
 
 	Variable doLine(vector<string> &tokens);
 	Variable split(int index, vector<string> tokens);
-	Variable operatorSelect(vector<string> left, vector<string> right, string op);
+	Variable operatorSelect(Variable left, Variable right, string op);
 	int findOperator1(vector<string> tokens);
 	int findOperator2(vector<string> tokens);
 	int findOperator3(vector<string> tokens);
@@ -72,6 +72,7 @@ public:
 	int findOperator5(vector<string> tokens);
 	int findOperator6(vector<string> tokens);
 	int findOperator7(vector<string> tokens);
+	int findOperator8(vector<string> tokens);
 	Variable doFunction(string funcName, vector<Variable> &arguments);
 	void GoThroughFunction(Function func);
  	void ChangeFunction(unsigned vectorIndex);
