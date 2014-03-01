@@ -98,7 +98,7 @@ bool Lexer::GreaterThanOp(Variable &left, Variable &right)
 		return (*(int *)left.data > *(int *)right.data;
 
 	// FLOAT
-	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+	if (left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
 		return (*(float *)left.data > *(float *)right.data;
 
 	cerr << "Function: GreatertThabnOp. Line Number: " << numemberLine << "Not right type to compare" << endl; 
@@ -116,7 +116,7 @@ bool Lexer::LessThanOp(Variable &left, Variable &right)
 		return (*(int *)left.data < *(int *)right.data;
 
 	// FLOAT
-	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+	if (left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
 		return (*(float *)left.data < *(float *)right.data;
 
 	cerr << "Function: LessThanOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
@@ -134,7 +134,7 @@ bool Lexer::LessOrEqualThanOp(Variable &left, Variable &right)
 		return (*(int *)left.data <= *(int *)right.data;
 
 	// FLOAT
-	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+	if (left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
 		return (*(float *)left.data <= *(float *)right.data;
 
 	cerr << "Function: LessThanOrEqualOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
@@ -152,7 +152,7 @@ bool Lexer::GreaterOrEqualThanOp(Variable &left, Variable &right)
 		return (*(int *)left.data >= *(int *)right.data;
 
 	// FLOAT
-	if (left.VariableTypes.STRING && right.VariableTypes.STRING)
+	if (left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
 		return (*(float *)left.data >= *(float *)right.data;
 
 	cerr << "Function: GreaterThanOrEqualOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
