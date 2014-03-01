@@ -139,6 +139,16 @@ void Lexer::FirstPass()
 				}
 			}
 		}
+		else if(fileLines[i].substring(0,3) == "int")
+		{
+			vector<string> tokens = TokenizeLine(fileLines[i]);
+			Variable var;
+			var.name = tokens[1];
+			var.type = INT;
+			tokens.erase
+			doLine(tokens.)
+			variables.push_back
+		}
 	}
 }
 
