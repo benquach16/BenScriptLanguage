@@ -61,10 +61,12 @@ void Lexer::FirstPass()
 		//Ignore all lines that begin with whitespace or are commented
 		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '\n' || fileLines[i][0] == '#')
 		{
+			cout << "Skipping line " << i << ", because we found a \"" << fileLines[i][0] << "\"" << endl;
 			continue;
 		}
 		else if(fileLines[i].substr(0, 7) == "function")
 		{
+			cout << "Found a function on line " << i << ".\n";
 			//Tokenize line.
 			vector<string> tokens = TokenizeLine(fileLines[0]);
 			//Make sure that it meets the basic requirements.
@@ -76,6 +78,7 @@ void Lexer::FirstPass()
 			int count = 0;
 			Function newFunc;
 			newFunc.name = tokens[1];
+			cout << "Function name found: " << newFunc.name << ".\n";
 			newFunc.fileLine = i;
 			Variable arg;
 			bool varTypeAssigned = false;
@@ -84,13 +87,17 @@ void Lexer::FirstPass()
 			{
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
+
+					cout << ") detected.\n";
 					if(j != tokens.size()-1 )
 					{
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
 						exit(1);
 					}
-
+					
 					vectorOfFunctions.push_back(newFunc);
+
+					cout << "Function pushed.\n";
 					break;
 				}
 				else if( tokens[j] == "string" && !varTypeAssigned) 
@@ -111,6 +118,8 @@ void Lexer::FirstPass()
 				}
 				else if(tokens[j][0] == ',' && varTypeAssigned && nameAssigned)
 				{
+
+					cout << "Variable pushed into function.\n";
 					newFunc.functionArguments.push_back(arg);
 					Variable tmp;
 					arg = tmp;
@@ -118,6 +127,7 @@ void Lexer::FirstPass()
 				else if(varTypeAssigned && !nameAssigned)
 				{
 					arg.name = tokens[j];
+					cout << "Variable created: " << arg.name << ".\n";
 					nameAssigned = true;
 				}
 				else
