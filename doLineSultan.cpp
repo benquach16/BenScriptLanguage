@@ -60,15 +60,14 @@ Variable Lexer::doLine(vector<string> &tokens)
 			}
 		}
 	}
+	else if (tokens.size() == 1)
+	{
+		//Find Value should handle the type and value.
+		return FindValue(token[0]);
+	}
 	else
 	{
-		//find the variable type that this is
-		//cerr << "lets do it to it" << endl;
-		Variable ret;
-
-		ret.type = STRING;
-
-		ret.data = (void*)tokens[0].c_str();
-		return ret;
+		cerr << "Function: DoLine. Syntax error on line: " << currentLined << endl;
+		exit(1);
 	}
 }
