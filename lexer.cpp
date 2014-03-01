@@ -188,6 +188,7 @@ void Lexer::FirstPass()
 Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 {
 	//set return value to null
+
 	if(funcName == "print")
 	{
 		for (unsigned i = 0; i < arguments.size(); i++)
@@ -266,6 +267,7 @@ void Lexer::GoThroughFunction(Function func)
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
+
 		doLine(tokens);
 		currentLine++;
 	}
@@ -338,8 +340,11 @@ vector<string> Lexer::TokenizeLine(const string &str)
   // traverse line end if get to end or hit comment
   while(i != str.size() && str[i] != '#')
   {
-	if(str[i] == '\t' && !quote)
-		continue;
+		if(str[i] == '\t' && !quote)
+		{
+			i++;
+			continue;
+		}
     //if hit function operators push them back
     if(str[i] == '(' || str[i] == ')' || 
        str[i] == ',' || str[i] == '?' || str[i] == ':')
@@ -798,6 +803,60 @@ Variable& Lexer::FindValue(string name)
 		{
 			i = *(int*)(variables[i].data);
 		}
+	}
+	//find it as a literal if it is one
+	if(name[0] == '\"')
+	{
+		//its a string so interpret it as such
+		Variable ret;
+		ret.type = STRING;
+		//realloc mem
+		char *t = new char[name.size()];
+		for(unsigned i = 0; i < name.size(); i++)
+		{
+			t[i] = name[i];
+		}
+		ret.data = t;
+		variables.push_back(ret);
+		return variables[variables.size()-1];
+	}
+	else if (name[0] > '0' && name[0] < '9')
+	{
+		//float or int literal
+		Variable ret;
+		for(unsigned i = 0; i < name.size(); i++)
+		{
+			if(name[i] == '.')
+			{
+				//its a float
+				ret.type = FLOAT;
+				//cast the string into a float now
+				istringstream iss(name);
+
+				float *t = new float;
+
+				iss >> *t;
+				ret.data = t;
+				variables.push_back(ret);
+				return variables[variables.size()-1];
+			}
+		}
+		istringstream iss(name);
+
+		int *t = new int;
+		
+		iss >> *t;
+		ret.data = t;
+		variables.push_back(ret);
+		return variables[variables.size()-1];
+	}
+	else if (name[0] == '.')
+	{
+		//float literal
+	}
+	else if (name == "true" || name == "false")
+	{
+
 	}
 	cerr << "Variable " << name << " not declared in scope." << endl;
 	exit(1);
