@@ -55,20 +55,19 @@ int Lexer::GetMatchingParens(unsigned leftParens, vector<string> &tokens)
 
 void Lexer::FirstPass()
 {
-	
+	cout
 	for(int i = 0; i < fileLines.size(); i++ )
 	{
 		//Ignore all lines that begin with whitespace or are commented
 		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '\n' || fileLines[i][0] == '#')
 		{
-			cout << "Skipping line " << i << ", because we found a \"" << fileLines[i][0] << "\"" << endl;
 			continue;
 		}
-		else if(fileLines[i].substr(0, 7) == "function")
+		else if(fileLines[i].substr(0, 8) == "function")
 		{
 			cout << "Found a function on line " << i << ".\n";
 			//Tokenize line.
-			vector<string> tokens = TokenizeLine(fileLines[0]);
+			vector<string> tokens = TokenizeLine(fileLines[i]);
 			//Make sure that it meets the basic requirements.
 			if(tokens.size() < 4 || tokens[2][0]!='(' )
 			{
@@ -83,7 +82,7 @@ void Lexer::FirstPass()
 			Variable arg;
 			bool varTypeAssigned = false;
 			bool nameAssigned = false;
-			for(int j = 2; j < tokens.size(); j++)
+			for(int j = 3; j < tokens.size(); j++)
 			{
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
@@ -118,11 +117,12 @@ void Lexer::FirstPass()
 				}
 				else if(tokens[j][0] == ',' && varTypeAssigned && nameAssigned)
 				{
-
 					cout << "Variable pushed into function.\n";
 					newFunc.functionArguments.push_back(arg);
 					Variable tmp;
 					arg = tmp;
+					varTypeAssigned = false;
+					nameAssigned = false;
 				}
 				else if(varTypeAssigned && !nameAssigned)
 				{
