@@ -63,7 +63,7 @@ void Lexer::FirstPass()
 		{
 			continue;
 		}
-		if(fileLines[i].substr(0, 7) == "function")
+		else if(fileLines[i].substr(0, 7) == "function")
 		{
 			//Tokenize line.
 			vector<string> tokens = TokenizeLine(fileLines[0]);
