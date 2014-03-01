@@ -53,7 +53,7 @@ public:
 	void FirstPass();
 	void ReadFile(char *filePath);
 
-	void TokenizeLine(string &str);
+	vector<string> TokenizeLine(const string &str);
 	void DoLine(vector<string> &line);
  	void ChangeFunction(unsigned vectorIndex);
 	void GetMatchingParens(unsigned leftParens, vector<string> &tokens);
