@@ -66,7 +66,7 @@ public:
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	vector<int> SetupFunction(unsigned leftParens, vector<string> &tokens);
 	
-protected:
+
 	unsigned currentLine;
 	//important stacks
 	vector<string> callStack;

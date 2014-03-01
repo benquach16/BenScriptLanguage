@@ -1,0 +1,12 @@
+function foo()
+	int b = 5
+	print(b)
+    
+function hi( int b )
+    int hey = 7
+    
+function wassup( int one, int two, int three )
+    int lalala = 9
+
+function main()
+    int omgaaaa = 0
