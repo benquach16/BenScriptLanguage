@@ -1,4 +1,4 @@
-GCC=g++
+GCC=g++ -g
 
 default: lexer main
 

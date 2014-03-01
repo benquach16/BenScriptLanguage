@@ -108,13 +108,13 @@ void Lexer::FirstPass()
 			bool nameAssigned = false;
 			for(int j = 3; j < tokens.size(); j++)
 			{
-				cout << "Here." << endl;
+				//cout << "Here." << endl;
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
 					//cout << ") detected.\n";
 					for(int q = 0; q < tokens.size(); q++)
 					{
-						cout << "\"" << tokens[q] << "\"\n";
+						//cout << "\"" << tokens[q] << "\"\n";
 					}
 					
 					if(j != tokens.size()-1 )
@@ -182,7 +182,7 @@ void Lexer::FirstPass()
             //cout << fileLines[i] << endl;
         }
 	}
-    cout << "We are out of the FirstPass!" << endl;
+	//cout << "We are out of the FirstPass!" << endl;
 }
 
 Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
@@ -210,6 +210,12 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 				cout << (bool*)arguments[i].data << endl;
 			}
 		}
+		Variable ret;
+		ret.name = "t";
+		ret.type = STRING;
+		char *t = new char;
+		ret.data = t;
+		return ret;
 	}
 	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
@@ -268,8 +274,13 @@ void Lexer::GoThroughFunction(Function func)
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
+		//cerr << currentLine << endl;
 		doLine(tokens);
 		currentLine++;
+		if(currentLine >= fileLines.size())
+		{
+			break;
+		}
 	}
 }
 
@@ -683,15 +694,15 @@ Variable Lexer::split(int index, vector<string> tokens)
 
   for(int i = index+1; i < tokens.size(); i++)
     rightTokens.push_back(tokens.at(i));
-
+	/*
   for(int i = 0; i < leftTokens.size(); i++)
     cout << leftTokens.at(i) << " ";
   cout << endl;
   
   for(int i = 0; i < rightTokens.size(); i++)
-  cout << rightTokens.at(i) << " ";
+	cout << rightTokens.at(i) << " ";
   cout << endl;
-
+	*/
   Variable left = doLine(leftTokens);
   Variable right = doLine(rightTokens);
 
@@ -752,7 +763,8 @@ Variable Lexer::doLine(vector<string> &tokens)
       if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
       {
 	//proper function call
-	SetupFunction(1, tokens);
+				return SetupFunction(1, tokens);
+
       }
 
       else
