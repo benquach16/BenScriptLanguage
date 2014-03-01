@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 
 using namespace std;
 
@@ -10,6 +11,8 @@ vector<string> TokenizeLine(const string &str)
   int i = 0;
 
   string curToken;
+
+  bool quote = false;
 
   // traverse line end if get to end or hit comment
   while(i != str.size() && str[i] != '#')
@@ -63,8 +66,29 @@ vector<string> TokenizeLine(const string &str)
       i++;
     }
 
+    else if(str[i] == '\"')
+    {
+      if(quote && curToken.size() > 0 && str[i-1] != '\\')
+      {
+	curToken+= str[i];
+	tokens.push_back(curToken);
+	curToken = "";
+      }
+
+      if(!quote)
+      {
+	curToken+= str[i];
+	if(!quote && str[i-1] == '\\')
+	{
+	  cerr << "escaped \" outside of string literal" << endl;
+	  exit(1);
+	}
+	quote = true;
+      }
+    }
+
     // if hit space reset curToken
-    else if(str[i] == ' ')
+    else if(str[i] == ' ' && !quote)
     {
       if(curToken.size() > 0)
       {
@@ -89,7 +113,7 @@ vector<string> TokenizeLine(const string &str)
 int main()
 {
   vector <string> tokens;
-  string line = "int a+=dry && int b == c + 4 || s || s";
+  string line = "\" skdlfjskdl \\\" lkdjsfdksf";
   tokens = TokenizeLine(line);
   cout <<tokens.size() << endl;
   for(int i = 0; i < tokens.size(); i++)
