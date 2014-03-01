@@ -1,6 +1,6 @@
 GCC=g++
 
-default: lexer
+default: lexer main
 
 main: lexer
 	$(GCC) lexer main.cpp -o Interpreter
