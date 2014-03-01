@@ -9,6 +9,11 @@ Lexer::~Lexer()
 {
 }
 
+//Helper Functions
+bool Lexer::MakeVarIfVar( int &i, vector<string> &fileLines)
+{
+    //switch(fileLines)
+}
 
 //DYLANS FUNCTION
 void Lexer::ReadFile(char *filePath)
@@ -139,15 +144,15 @@ void Lexer::FirstPass()
 				}
 			}
 		}
-		else if(fileLines[i].substring(0,3) == "int")
+		else if(fileLines[i].substr(0,3) == "int")
 		{
-			vector<string> tokens = TokenizeLine(fileLines[i]);
-			Variable var;
-			var.name = tokens[1];
-			var.type = INT;
-			tokens.erase
-			doLine(tokens.)
-			variables.push_back
+			//~ vector<string> tokens = TokenizeLine(fileLines[i]);
+			//~ Variable var;
+			//~ var.name = tokens[1];
+			//~ var.type = INT;
+			//~ tokens.erase
+			//~ doLine(tokens.)
+			//~ variables.push_back
 		}
 	}
 }
