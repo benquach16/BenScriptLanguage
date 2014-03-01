@@ -108,10 +108,11 @@ void Lexer::FirstPass()
 			bool nameAssigned = false;
 			for(int j = 3; j < tokens.size(); j++)
 			{
+				cout << "Here." << endl;
 				if( tokens[j][0] == ')' && (varTypeAssigned == nameAssigned))
 				{
 					//cout << ") detected.\n";
-					if(j != tokens.size()-1 )
+					if(j != tokens.size()-2 )
 					{
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
 						//exit(1);
@@ -175,8 +176,8 @@ void Lexer::FirstPass()
             //MakeVarIfVar(tokens);
             //cout << fileLines[i] << endl;
         }
-        //cout << endl;
 	}
+    cout << "We are out of the FirstPass!" << endl;
 }
 
 Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
@@ -260,7 +261,6 @@ void Lexer::GoThroughFunction(Function func)
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
-		tokens[0].erase(0,1);
 		doLine(tokens);
 		currentLine++;
 	}
@@ -333,6 +333,8 @@ vector<string> Lexer::TokenizeLine(const string &str)
   // traverse line end if get to end or hit comment
   while(i != str.size() && str[i] != '#')
   {
+	if(str[i] == '\t' && !quote)
+		continue;
     //if hit function operators push them back
     if(str[i] == '(' || str[i] == ')' || 
        str[i] == ',' || str[i] == '?' || str[i] == ':')
@@ -630,7 +632,6 @@ Variable Lexer::doLine(vector<string> &tokens)
     if(mid == -1)
       mid = findOperator7(tokens);
 
-    cout << "mid: " << mid << endl;
     if(mid != -1)
       return split(mid, tokens);
     
@@ -651,15 +652,48 @@ Variable Lexer::doLine(vector<string> &tokens)
       }
     }
   }
-  else
-  {
-    //find the variable type that this is
-    //cerr << "lets do it to it" << endl;
-    Variable ret;
+  else if (tokens.size() == 1)
+	{
+		//Find Value should handle the type and value.
+		return FindValue(tokens[0]);
+	}
+	else
+	{
+		cerr << "Function: DoLine. Syntax error on line: " << currentLine << endl;
+		exit(1);
+	}
+}
+Variable Lexer::UpdateValue(string name, Variable var)
+{
+	for(int i = 0; i < variables.size(); i++)
+	{
+		if(variables[i].name == name)
+		{
+			variables[i] = var;
+			return variables[i];
+		}
+		else if(variables[i].name[0] == '#')
+		{
+			i = *(int*)(variables[i].data);
+		}
+	}
+	cerr << "Variable " << name << " not declared in scope." << endl;
+	exit(1);
+}
 
-    ret.type = STRING;
-    
-    ret.data = (void*)tokens[0].c_str();
-    return ret;
-  }
+Variable& Lexer::FindValue(string name)
+{
+	for(int i = 0; i < variables.size(); i++)
+	{
+		if(variables[i].name == name)
+		{
+			return variables[i];
+		}
+		else if(variables[i].name[0] == '#')
+		{
+			i = *(int*)(variables[i].data);
+		}
+	}
+	cerr << "Variable " << name << " not declared in scope." << endl;
+	exit(1);
 }

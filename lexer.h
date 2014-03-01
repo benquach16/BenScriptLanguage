@@ -78,6 +78,8 @@ public:
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	Variable SetupFunction(unsigned leftParens, vector<string> &tokens);
 	bool MakeVarIfVar( vector<string> &tokens);
+	Variable& FindValue(string name);
+	Variable UpdateValue(string name, Variable var);
 
 	unsigned currentLine;
 	//important stacks

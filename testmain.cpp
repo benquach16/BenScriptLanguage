@@ -17,14 +17,15 @@ int main(int argc, char **argv)
 		interpreter.ReadFile(argv[i]);
         cout << "Here.\n";
         interpreter.FirstPass();
+        cout << "Made it." << endl;
         //cout << interpreter.vectorOfFunctions[0].fileLine << endl;
         /*for(int i=0; i < interpreter.vectorOfFunctions.size();i++)
             for(int j=0; j < interpreter.vectorOfFunctions[i].functionArguments.size(); j++)
                 cout << interpreter.vectorOfFunctions[i].functionArguments[j].name << endl;
         cout << interpreter.variables.size()<< endl;*/
         cout << "Here.\n";
-        vector<string> tokens = interpreter.TokenizeLine("doFunction(this, is, a, long, list)");
-        interpreter.SetupFunction(1,tokens);
+        //vector<string> tokens = interpreter.TokenizeLine("doFunction(this, is, a, long, list)");
+        //interpreter.SetupFunction(1,tokens);
 	}
 	return 0;
 }
