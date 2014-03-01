@@ -11,7 +11,7 @@ void Lexer::SetupFunction(int leftParen, vector<string> &tokens)
 		{
 			if (leftParensCount == 0)		// check if this should be the last right parens
 				commas.push_back(i)	// and add index to commas vector
-				return commas.            
+				return commas;
 			else
 				leftParensCount--;			// otherwise it's not last right parens and decrement
 		}
