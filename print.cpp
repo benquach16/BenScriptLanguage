@@ -1,0 +1,4 @@
+void Lexer::doFunction(unsigned 
+{
+	
+}
