@@ -26,8 +26,25 @@ struct Variable
 	void* data;
 };
 
+enum OperatorTypes
+{
+	//arthemetic operators
+	ADD,
+	SUBTRACT,
+	MULTIPLY,
+	DIVIDE,
+	MODULO,
+	//assignment and comparison operators
+	ASSIGN,
+	EQUALS,
+	NOT,
+	NOTEQUALS,
+	GREATERTHAN,
+	LESSTHAN
+};
 
 
+//lexer class code
 class Lexer
 {
 public:
@@ -44,6 +61,7 @@ public:
 	
 protected:
 	int currentLine;
+	//important stacks
 	vector<string> callStack;
 	vector<Function> vectorOfFunctions;
 	vector<string> fileLines;
