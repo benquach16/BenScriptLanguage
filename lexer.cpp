@@ -92,9 +92,12 @@ void Lexer::FirstPass()
 						cerr << "Line " << (i+1) << " is not declared properly. There is information after the closed parenthesis.";
 						exit(1);
 					}
-					
+                    
+                    if(varTypeAssigned && nameAssigned)// if both are true, then variable has been created
+                        newFunc.functionArguments.push_back(arg);
+                        
 					vectorOfFunctions.push_back(newFunc);
-
+                    
 					cout << "Function pushed.\n";
 					break;
 				}
