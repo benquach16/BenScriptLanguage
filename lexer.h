@@ -8,7 +8,7 @@ struct Function
 {
 	string name;
 	unsigned fileLine;
-	vector<string> functionArguments;
+	vector<Variable> functionArguments;
 };
 
 enum VariableTypes
