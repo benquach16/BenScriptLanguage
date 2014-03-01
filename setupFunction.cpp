@@ -5,12 +5,12 @@ void Lexer::SetupFunction(int leftParen, vector<string> &tokens)
 
 	for (int i = leftParens; i < tokens.size(); i++)
 	{
-		if (tokens[0] == "(")				// If a left parenthesis is found
+		if (tokens[i] == "(")				// If a left parenthesis is found
 			leftParensCount++;				// increment 
-		else if (tokens[0] == ")")			// otherwise if a right parenthesis is found
+		else if (tokens[i] == ")")			// otherwise if a right parenthesis is found
 		{
 			if (leftParensCount == 0)		// check if this should be the last right parens
-				commas.push_back(i)	// and add index to commas vector
+				commas.push_back(i);	// and add index to commas vector
 				return commas;
 			else
 				leftParensCount--;			// otherwise it's not last right parens and decrement
