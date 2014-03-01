@@ -3,16 +3,16 @@ function foo()
 	print(b)
     
 function hi( int b )
-    int hey = 7
-    
+	int hey = 7
+
 function wassup( int one, int two, int three, int four )
-    int lalala = 9
+	int lalala = 9
 
 function main()
-    int omgaaaa = 0
+	int omgaaaa = 0
 
-int a
-string b
-bool c
-double d
- 
+int myint
+string mystring
+bool mybool
+float myagaindouble
+float mydouble

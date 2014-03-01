@@ -10,13 +10,10 @@ Lexer::~Lexer()
 }
 
 //Helper Functions
-bool Lexer::MakeVarIfVar( int i, vector<string> &fileLines)
+bool Lexer::MakeVarIfVar( vector<string> &tokens)
 {
     
-    vector<string> tokens = TokenizeLine(fileLines[i]);
-    cout << i << endl;
     Variable var;
-    
     var.name = tokens[1];
     
     if ( tokens[0] == "int" )
@@ -30,9 +27,10 @@ bool Lexer::MakeVarIfVar( int i, vector<string> &fileLines)
     else
         return false;  
     
-    //tokens.erase(tokens.begin());
-    //doLine(tokens);
+    //~ tokens.erase(tokens.begin());
+    //~ doLine(tokens);
     variables.push_back(var);
+    cout << tokens[1] << endl;
     return true;
 }
 
@@ -83,8 +81,9 @@ void Lexer::FirstPass()
 {
 	for(int i = 0; i < fileLines.size(); i++ )
 	{
+        //cout << "Line: " << i+1 << " First char: "<< fileLines[i][0]  << ":";
 		//Ignore all lines that begin with whitespace or are commented
-		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '\n' || fileLines[i][0] == '#')
+		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '#' || fileLines[i].size() == 0)
 		{
 			continue;
 		}
@@ -92,8 +91,7 @@ void Lexer::FirstPass()
 		{
 			//cout << "Found a function on line " << i << ".\n";
 			//Tokenize line.
-            
-			vector<string> tokens = TokenizeLine(fileLines[i]);
+            vector<string> tokens = TokenizeLine(fileLines[i]);
 			//Make sure that it meets the basic requirements.
 			if(tokens.size() < 4 || tokens[2][0]!='(' )
 			{
@@ -167,7 +165,15 @@ void Lexer::FirstPass()
 			}
             
 		}
-      
+        else
+        {
+            // << "GVAR";
+            vector<string> tokens = TokenizeLine(fileLines[i]);
+            //cout << tokens[1] << endl;
+            MakeVarIfVar(tokens);
+            //cout << fileLines[i] << endl;
+        }
+        //cout << endl;
 	}
 }
 
