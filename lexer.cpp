@@ -177,7 +177,7 @@ void Lexer::FirstPass()
 				else if(varTypeAssigned && !nameAssigned)
 				{
 					arg.name = tokens[j];
-					cout << "Variable created: " << arg.name << ".\n";
+					//cout << "Variable created: " << arg.name << ".\n";
 					nameAssigned = true;
 				}
 				else
@@ -202,7 +202,7 @@ void Lexer::FirstPass()
 	{
 		if(vectorOfFunctions[j].name == "main")
 		{
-			cout << "MAIN FOUND" << endl;
+			//cout << "MAIN FOUND" << endl;
 			currentLine = vectorOfFunctions[j].fileLine;
 			cout << currentLine << endl;
 			vector<Variable> emptyArgs;
@@ -318,8 +318,8 @@ void Lexer::GoThroughFunction()
 	int tabCount = numTabs(fileLines[currentLine])-1;	
 	while(fileLines[currentLine][tabCount] == '\t')
 	{
-		cerr << currentLine << endl;
-		cerr << fileLines[currentLine] << endl;
+		//cerr << currentLine << endl;
+		//cerr << fileLines[currentLine] << endl;
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
 		//cerr << currentLine << endl;
@@ -374,7 +374,7 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 	}
 	for(int i = 1; i<commas.size(); i++)
 	{
-		cout << "Arg"<< (i+1) <<": ";
+		//cout << "Arg"<< (i+1) <<": ";
 		for(int j = commas[i-1] + 1; j<commas[i]; j++)
 		{
 			convertTokens.push_back(tokens[j]);
@@ -875,7 +875,7 @@ Variable Lexer::doLine(vector<string> &tokens)
       if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
       {
 				//proper function call
-    	  cout << "Found a function: " << tokens[0] << endl;
+    	  //cout << "Found a function: " << tokens[0] << endl;
 				return SetupFunction(1, tokens);
 
       }
