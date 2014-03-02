@@ -758,7 +758,6 @@ int Lexer::findOperator8(vector <string> tokens)
 	return -1;
 }
 
-// selects operation and executes left and right
 Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTokens, string op)
 {
 
@@ -786,17 +785,17 @@ Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTo
 		}
 		if(op == "++")
 		{
-			OpPlusPlus(send, isLeft);		  
+			return OpPlusPlus(send, isLeft);		  
 		}
 	  
 		else if(op == "--")
 		{
-			OpMinusMinus(send, isLeft);
+			return OpMinusMinus(send, isLeft);
 		}
 	  
 		else
 		{
-			OpNot(send);
+			return OpNot(send);
 		}
 	}
 	
@@ -1292,18 +1291,20 @@ Variable Lexer::OpPlusPlus(Variable var, bool isLeft)
 	if(var.type == INT)
 	{
 		temp.type = INT;
+		temp.name = var.name;
 		temp.data = new int(1);
 		if(isLeft)
 		{
-			temp = OpPlus(var, temp);
-			UpdateValue(var.name, temp);
-			return temp;
+		  temp = OpPlus(temp, var);
+		  *(int *)FindValue(var.name).data = *(int *)temp.data;
+		  return var;
 		}
     
 		else
 		{
-			UpdateValue(var.name, OpPlus(var, temp));
-			return var;
+		  temp = OpPlus(var, temp);
+		  *(int *)FindValue(var.name).data = *(int *)temp.data;
+		  return temp;
 		}
 	}
 
@@ -1311,18 +1312,20 @@ Variable Lexer::OpPlusPlus(Variable var, bool isLeft)
 	{
 		temp.type = FLOAT;
 		temp.data = new float(1.0);
+		temp.name = var.name;
 
 		if(isLeft)
 		{
-			temp = OpPlus(var, temp);
-			UpdateValue(var.name, temp);
-			return temp;
+		  temp = OpPlus(var,temp);
+		  *(float *)FindValue(var.name).data = *(float *)temp.data;
+		  return var;
 		}
     
 		else
 		{
-			UpdateValue(var.name, OpPlus(var, temp));
-			return var;
+		  temp = OpPlus(var, temp);
+		  *(float *)FindValue(var.name).data = *(float *)temp.data;
+		  return temp;
 		}
 	}
 
@@ -1339,37 +1342,41 @@ Variable Lexer::OpMinusMinus(Variable var, bool isLeft)
 	if(var.type == INT)
 	{
 		temp.type = INT;
+		temp.name = var.name;
 		temp.data = new int(-1);
 		if(isLeft)
 		{
-			temp = OpPlus(var, temp);
-			UpdateValue(var.name, temp);
-			return temp;
+		  temp = OpPlus(var, temp);
+		  *(int *)FindValue(var.name).data = *(int *)temp.data;
+		  return var;
 		}
     
 		else
 		{
-			UpdateValue(var.name, OpPlus(var, temp));
-			return var;
+		  temp = OpPlus(var, temp);
+		  *(int *)FindValue(var.name).data = *(int *)temp.data;
+		  return temp;
 		}
 	}
 
 	if(var.type == FLOAT)
 	{
 		temp.type = FLOAT;
+		temp.name = var.name;
 		temp.data = new float(1.0);
 
 		if(isLeft)
 		{
-			temp = OpPlus(var, temp);
-			UpdateValue(var.name, temp);
-			return temp;
+		  temp = OpPlus(var, temp);
+		  *(float *)FindValue(var.name).data = *(float *)temp.data;
+		  return var;
 		}
     
 		else
 		{
-			UpdateValue(var.name, OpPlus(var, temp));
-			return var;
+		  temp = OpPlus(var, temp);
+		  *(float *)FindValue(var.name).data = *(float *)temp.data;
+		  return temp;
 		}
 	}
 
