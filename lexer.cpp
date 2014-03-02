@@ -928,7 +928,7 @@ Variable& Lexer::FindValue(string name)
 		variables.push_back(ret);
 		return variables[variables.size()-1];
 	}
-	else if (name[0] > '0' && name[0] < '9')
+	else if (name[0] >= '0' && name[0] <= '9')
 	{
 		//float or int literal
 		Variable ret;
