@@ -1,7 +1,18 @@
 #include "lexer.h"
 Lexer::Lexer() : currentLine(1)
 {
-	
+  Variable temp;
+  temp.type = BOOL;
+  temp.name = "true";
+  temp.data = new bool(true);
+
+  Variable temp2;
+  temp2.type = BOOL;
+  temp2.name = "true";
+  temp2.data = new bool(false);
+  
+  variables.push_back(temp);
+  variables.push_back(temp2);
 }
 
 Lexer::~Lexer()
@@ -166,7 +177,7 @@ void Lexer::FirstPass()
 				else if(varTypeAssigned && !nameAssigned)
 				{
 					arg.name = tokens[j];
-					//cout << "Variable created: " << arg.name << ".\n";
+					cout << "Variable created: " << arg.name << ".\n";
 					nameAssigned = true;
 				}
 				else
@@ -208,11 +219,14 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 			}
 			else if(arguments[i].type == FLOAT)
 			{
-				cout << (float*)arguments[i].data << endl;
+			  cout << *(float*)arguments[i].data << endl;
 			}
 			else
 			{
-				cout << (bool*)arguments[i].data << endl;
+			  if(*(bool*)arguments[i].data)
+			    cout << "true" << endl;
+			  else
+			    cout << "false" << endl;
 			}
 		}
 		Variable ret;
@@ -946,11 +960,28 @@ Variable& Lexer::FindValue(string name)
 	}
 	else if (name[0] == '.')
 	{
-		//float literal
+	  Variable ret;
+	  //float literal
+	  ret.type = FLOAT;
+	  //cast the string into a float now
+	  istringstream iss(name);
+
+	  float *t = new float;
+
+	  iss >> *t;
+	  ret.data = t;
+	  variables.push_back(ret);
+	  return variables[variables.size()-1];
 	}
+
 	else if (name == "true" || name == "false")
 	{
-
+	  Variable ret;
+	  ret.type = BOOL;
+	  if(name == "true")
+	    ret.data = new bool(true);
+	  else
+	    ret.data = new bool(false);
 	}
 	cerr << "Variable " << name << " not declared in scope." << endl;
 	cerr << "Scope: " << endl;
