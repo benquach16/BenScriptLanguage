@@ -25,11 +25,9 @@ bool Lexer::MakeVarIfVar( vector<string> &tokens)
     else if (tokens[0] == "string")
         var.type = STRING;
     else
-        return false;  
-    cerr << var.name;
+        return false;
     //~ tokens.erase(tokens.begin());
     //~ doLine(tokens);
-		cerr << "Creating variable: " << var.name << endl;
 
     variables.push_back(var);
 		//cerr << "current scope: " << endl;
@@ -280,7 +278,8 @@ void Lexer::GoThroughFunction(Function func)
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
 		//cerr << currentLine << endl;
-		doLine(tokens);
+		if(tokens.size() > 0)
+			doLine(tokens);
 		currentLine++;
 		if(currentLine >= fileLines.size())
 		{
