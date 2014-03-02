@@ -724,8 +724,8 @@ int Lexer::findOperator5(vector <string> tokens)
 		else if(tokens.at(i) == ")")
 			parens--;
 
-		if(parens == 0 && tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
-		   tokens.at(i) == "<" || tokens.at(i) == ">")
+		if(parens == 0 && (tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
+				   tokens.at(i) == "<" || tokens.at(i) == ">"))
 			return i;
 	}
 	return -1;
