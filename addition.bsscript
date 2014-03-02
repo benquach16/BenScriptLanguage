@@ -1,5 +1,6 @@
+int a
 function main()
-	int a = 0
+	a = 0
 	print("a is ")
 	print(a)
 	a+=5

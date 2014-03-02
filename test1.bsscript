@@ -5,7 +5,7 @@ function foo(int a)
 	print(a)
 function main()
 	int c = 6
-	int d = 6
+	int d = 5
 	print(d)
 	print("Increment d")
 	d++

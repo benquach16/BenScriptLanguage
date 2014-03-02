@@ -222,9 +222,9 @@ void Lexer::FirstPass()
 		else
 		{
 			// << "GVAR";
-			//vector<string> tokens = TokenizeLine(fileLines[i]);
+			vector<string> tokens = TokenizeLine(fileLines[i]);
 			//cout << tokens[1] << endl;
-			//MakeVarIfVar(tokens);
+			MakeVarIfVar(tokens);
 			//cout << fileLines[i] << endl;
 		}
 	}

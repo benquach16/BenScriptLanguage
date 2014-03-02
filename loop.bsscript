@@ -1,3 +1,4 @@
+#Basic loop script in BenMark Standard
 function main()
 	int a = 5
 	int b = 1
