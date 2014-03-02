@@ -79,7 +79,7 @@ public:
     bool OpLessEqual(Variable left,Variable right);
     bool OpGreatEqual(Variable left,Variable right);
     bool OpGreat(Variable left,Variable right);
-    
+    int numTabs(string line);
     
     
 	Variable doLine(vector<string> &tokens);

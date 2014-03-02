@@ -1348,3 +1348,21 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 	}
 }
 
+int numTabs(string line)
+{
+    int num; 
+    bool hellnah = false;
+    for(int i = 0; i < line.size(); i++)
+    {
+        if(line[i] == '\t')
+        {
+            num++;
+            hellnah = true;
+        }
+        else
+            if(hellnah)
+                return num;
+    }
+    
+    return num;
+}
