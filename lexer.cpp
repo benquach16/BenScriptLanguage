@@ -605,9 +605,43 @@ int Lexer::findOperator8(vector <string> tokens)
 // selects operation and executes left and right
 Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTokens, string op)
 {
+
+	Variable var; 
+	
+	if (op == "++" || op == "--" || op == "!")
+	{
+		Variable send;
+		if(leftTokens.size() == 0)
+		{
+			if(rightTokens.size() == 0)
+			{
+				cerr << "Unary Operator "<< op <<" has no arguments on line " << currentLine <<".\n";
+				exit(1);
+			}
+			send = doLine(rightTokens);
+		}else if(rightTokens.size() == 0)
+		{
+			send = doLine(leftTokens);
+		}else{
+			cerr << "Operator "<< op <<" has two variables on line " << currentLine <<".\n";
+			exit(1);
+		}
+		if(op == "++")
+		{
+			//opPlusPlus(send);
+		}
+		else if(op == "--")
+		{
+			//opMinusMinus(send);
+		}
+		else
+		{
+			//opNot(send);
+		}
+	}
+	
 	Variable left = doLine(leftTokens);
 	Variable right = doLine(rightTokens);
-	Variable var; 
 
     if(op == "=")
         return UpdateValue(left.name, right);
@@ -698,7 +732,6 @@ Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTo
 		var.data = new bool(OpOr(left, right));
 		return var;
 	}
-
 
   
 	Variable trash;
