@@ -146,7 +146,7 @@ void Lexer::FirstPass()
                     {
                     	newFunc.functionArguments.push_back(arg);
                     }
-										cerr << newFunc.name << endl;
+		    //cerr << newFunc.name << endl;
 					vectorOfFunctions.push_back(newFunc);
                     
 					//cout << "Function pushed.\n";
@@ -207,7 +207,7 @@ void Lexer::FirstPass()
 		{
 			//cout << "MAIN FOUND" << endl;
 			currentLine = vectorOfFunctions[j].fileLine;
-			cout << currentLine << endl;
+			//cout << currentLine << endl;
 			vector<Variable> emptyArgs;
 			doFunction("main", emptyArgs);
 			break;
@@ -216,97 +216,160 @@ void Lexer::FirstPass()
 	//cout << "We are out of the FirstPass!" << endl;
 }
 
+void Lexer::AddScope(string input)
+{
+  //checks if adding main
+  bool hasHash = false;
+  Variable temp;
+  temp.name = input;
+  temp.type = INT;
+
+  int firstHash;
+  // traverses variables for hashtags and 
+  for(int i = 0; i < variables.size(); i++)
+    if(variables.at(i).name == "#")
+    {
+      hasHash = true;
+      firstHash = i;
+      break;
+    }
+
+  
+  if(variables.at(firstHash).name == "#")
+  {
+    if(!hasHash)
+      temp.data = new int(variables.size());
+    
+    else
+    {
+      temp.data = new int(*(int *)variables.at(firstHash).data);
+      *(int *)variables.at(firstHash).data = variables.size();
+    }
+  }
+
+  variables.push_back(temp);
+}
+
+void Lexer::EraseScope()
+{
+  int i = variables.size()-1;
+  while(variables.at(i).name != "#" || variables.at(i).name != "-")
+    variables.pop_back();
+
+  if(variables.at(i).name == "#")
+  {
+    for(int j = 0; i < variables.size(); j++)
+    {
+      if(variables.at(j).name == "#")
+      {
+	*(int *)variables.at(j).data = *(int *)variables.at(i).data;
+	break;
+      }
+    }
+  }
+  variables.pop_back();
+}
+
 Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 {
-	//set return value to null
-
-	if(funcName == "print")
+  for(int i = 0; i < variables.size(); i++)
+    cout << variables.at(i).name << endl;
+  cout << endl;
+  //set return value to null
+  if(funcName != "print")
+  {
+    if(funcName == "if" || funcName == "while" || funcName == "for" || funcName =="else")
+      AddScope("-");
+    else
+      AddScope("#");
+  }
+  if(funcName == "print")
+  {
+    for (unsigned i = 0; i < arguments.size(); i++)
+    {
+      if(arguments[i].type == INT)
+      {
+	cout << (*(int*)arguments[i].data) << endl;
+      }
+      else if(arguments[i].type == STRING)
+      {
+	cout << (char*)arguments[i].data << endl;
+      }
+      else if(arguments[i].type == FLOAT)
+      {
+	cout << *(float*)arguments[i].data << endl;
+      }
+      else
+      {
+	if(*(bool*)arguments[i].data)
+	  cout << "true" << endl;
+	else
+	  cout << "false" << endl;
+      }
+    }
+    if(arguments.size() == 0)
+    {
+      cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+      exit(1);
+    }
+    return arguments[0];
+  }
+  else if(funcName == "if")
+  {
+    if(arguments[0].type != BOOL || arguments.size() != 1)
+    {
+      cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
+      exit(1);
+    }
+    int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
+    if(*(bool*)arguments[0].data)
+    {
+      currentLine++;
+      GoThroughFunction();
+    }
+    currentLine = PCBack;
+    cout << "PCBack: " << PCBack << endl;
+    if(arguments.size() == 0)
+    {
+      cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+      exit(1);
+    }
+    return arguments[0];
+  }
+  for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
+  {
+    //make sure we have the proper var types
+    Function func;
+    //cerr << vectorOfFunctions[0].name << endl;
+    if(funcName == vectorOfFunctions[i].name && 
+       vectorOfFunctions[i].functionArguments.size() == arguments.size())
+    {
+      bool loopBroken = false;
+      for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
+      {
+	if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
 	{
-		for (unsigned i = 0; i < arguments.size(); i++)
-		{
-			if(arguments[i].type == INT)
-			{
-				cout << (*(int*)arguments[i].data) << endl;
-			}
-			else if(arguments[i].type == STRING)
-			{
-				cout << (char*)arguments[i].data << endl;
-			}
-			else if(arguments[i].type == FLOAT)
-			{
-			  cout << *(float*)arguments[i].data << endl;
-			}
-			else
-			{
-			  if(*(bool*)arguments[i].data)
-			    cout << "true" << endl;
-			  else
-			    cout << "false" << endl;
-			}
-		}
-		if(arguments.size() == 0)
-		{
-			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
-			exit(1);
-		}
-		return arguments[0];
+	  loopBroken = true;
+	  break;
 	}
-	else if(funcName == "if")
-	{
-		if(arguments[0].type != BOOL || arguments.size() != 1)
-		{
-			cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
-			exit(1);
-		}
-		int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
-		if(*(bool*)arguments[0].data)
-		{
-			currentLine++;
-			GoThroughFunction();
-		}
-		currentLine = PCBack;
-		cout << "PCBack: " << PCBack << endl;
-		if(arguments.size() == 0)
-		{
-			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
-			exit(1);
-		}
-		return arguments[0];
-	}
-	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
-	{
-		//make sure we have the proper var types
-		Function func;
-		//cerr << vectorOfFunctions[0].name << endl;
-		if(funcName == vectorOfFunctions[i].name && 
-			 vectorOfFunctions[i].functionArguments.size() == arguments.size())
-		{
-			bool loopBroken = false;
-			for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
-			{
-				if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
-				{
-					loopBroken = true;
-					break;
-				}
-			}
-			if(!loopBroken)
-			{
-				Variable ret;
-				ret.data = 0;			
-				//save the program counter temporarily
-				int prevCurrentLine = currentLine;
-				GoThroughFunction(vectorOfFunctions[i]);
-				//reset
-				currentLine = prevCurrentLine;
-				return ret;
-			}
-			
-		}
-	}
-	cerr << "No function call found for " << funcName << endl;
-	exit(1);
-	
+      }
+      if(!loopBroken)
+      {
+	Variable ret;
+	ret.data = 0;			
+	//save the program counter temporarily
+	int prevCurrentLine = currentLine;
+	GoThroughFunction(vectorOfFunctions[i]);
+	//reset
+	currentLine = prevCurrentLine;
+	return ret;
+      }
+      
+    }
+  }
+  cerr << "No function call found for " << funcName << endl;
+  exit(1);
+  
 }
 
 void Lexer::GoThroughFunction(Function func)
@@ -335,6 +398,7 @@ void Lexer::GoThroughFunction()
 			break;
 		}
 	}
+	EraseScope();
 }
 
 Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)

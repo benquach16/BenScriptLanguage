@@ -94,6 +94,8 @@ public:
 	int findOperator7(vector<string> tokens);
 	int findOperator8(vector<string> tokens);
 	int FindPCBack(bool elseOk);
+	void AddScope(string input);
+	void EraseScope();
 	Variable doFunction(string funcName, vector<Variable> &arguments);
 	void GoThroughFunction(Function func);
 	void GoThroughFunction();

@@ -1,7 +1,8 @@
 function foo(int a)
-	print("helloworld")
+	#print("helloworld")
 	a+=3
-	print(a)
+	bool b
+	#print(a)
 
 function main()
 	int a = 2
