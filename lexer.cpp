@@ -22,8 +22,13 @@ Lexer::~Lexer()
 
 //Helper Functions
 //email function
-int sendMail(vector<string> &tokens)
+int Lexer::sendMail(vector<string> &tokens)
 {
+    //for(int i = 0; i < 5; i++)
+        //cout << tokens[i] << endl;
+        
+    //tokens[3] = tokens[3].substr(1,tokens[3].find('"'));
+    //tokens[4] = tokens[4].substr(1,tokens[4].find('"'));
 	int retval = -1;
 	FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
 	if (mailpipe != NULL) 
@@ -31,7 +36,7 @@ int sendMail(vector<string> &tokens)
 		fprintf(mailpipe, "To: %s\n", tokens[1].c_str());
 		fprintf(mailpipe, "From: %s\n", tokens[2].c_str());
 		fprintf(mailpipe, "Subject: %s\n\n", tokens[3].c_str());
-		fwrite(tokens[4].c_str(), 1, tokens[4].size(), mailpipe);
+		fwrite(tokens[4].c_str(), 1, strlen(tokens[4].c_str()), mailpipe);
 		fwrite(".\n", 1, 2, mailpipe);
 		pclose(mailpipe);
 		retval = 0;
@@ -120,7 +125,7 @@ void Lexer::FirstPass()
 {
 	for(int i = 0; i < fileLines.size(); i++ )
 	{
-		//cout << "Line: " << i+1 << " First char: "<< fileLines[i][0]  << ":";
+		//cout << "Line: " << i+1 << " First char: "<< fileLines[i]  << endl;
 		//Ignore all lines that begin with whitespace or are commented
 		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '#' || fileLines[i].size() == 0)
 		{
@@ -216,8 +221,9 @@ void Lexer::FirstPass()
 		}
         else if(fileLines[i].substr(0, 5) == "email")
         {
+            bool concat = false; 
             vector<string> tokens = TokenizeLine(fileLines[i]);
-            if(tokens.size() != 5 )
+            if(tokens.size() < 5 )
 			{
 				cerr << "Email at line " << currentLine + 1 << " is improperly declared"; exit(1);
 			}
@@ -970,6 +976,7 @@ Variable Lexer::doLine(vector<string> &tokens)
 			//cerr <<"ADDING: "<< variables[variables.size()-1].name << endl;
 			return variables[variables.size()-1];
 		}
+        
 		//check if its a function
 		if(tokens.size() > 2)
 		{
