@@ -1225,7 +1225,7 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 		var->data = value + *(char *)right.data; // Assign correct value
 	}
 
-
+	// :)
 
 	// FLOAT
 	// Float/Bool + Float/Bool
