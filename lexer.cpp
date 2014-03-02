@@ -601,7 +601,7 @@ int Lexer::findOperator8(vector <string> tokens)
 // selects operation and executes left and right
 Variable Lexer::operatorSelect(Variable left, Variable right, string op)
 {
-  /*switch(op)
+  switch(op)
   {
   case "=":
     return UpdateValue(left.name, right);
@@ -679,7 +679,7 @@ Variable Lexer::operatorSelect(Variable left, Variable right, string op)
     return OpMod(left, right);
     break;
 
-  }*/
+  }
 	Variable var;
 	return var;
 }
