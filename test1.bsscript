@@ -1,22 +1,22 @@
 function foo(int a)
 	int b = 4
 	int a = 5
+	print("Print a")
 	print(a)
 function main()
 	int c = 6
 	int d = 5
+	print(d)
+	print("Increment d")
 	d++
+	print(d)
 	if(c == d)
 		print("test")
 		int test = 1
-		print(test)
 		print("Going to foo")
 		foo(test)
 	else
 		print("Ifcomplete")
 		
-	while(c < d)
-		c++
-		print (c)
 
 
