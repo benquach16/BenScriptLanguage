@@ -1153,14 +1153,16 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 
 	// STRING
 	// (String + String)
-    /*
+   
 	if ((left.type == STRING) && (right.type == STRING))
 	{
 		var.type = STRING;		// Change type
-		var.data = new string(*(char *)left.data + *(char *)right.data);		// Assign initial value to match type
+        string temp = *(char **)left.data;
+        temp += *(char **)right.data;
+		var.data = new string(temp);		// Assign initial value to match type
 		// Assign correct value
 	}
-
+ /*
     if ((left.type == STRING) && (right.type == INT))
 	{
 		var.type = STRING;		// Change type
