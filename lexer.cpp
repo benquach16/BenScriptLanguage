@@ -284,6 +284,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
         AddScope("#");
     }
   }
+
   if(funcName == "print")
   {
     for (unsigned i = 0; i < arguments.size(); i++)
@@ -351,6 +352,10 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 			}
 		  	if(!loopBroken)
 		  	{
+					for(int k = 0; k < arguments.size(); k++)
+					{
+						variables.push_back(arguments[k]);
+					}
 				Variable ret;
 				ret.data = 0;			
 				//save the program counter temporarily
@@ -559,6 +564,7 @@ vector<string> Lexer::TokenizeLine(const string &str)
 
   if(!curToken.empty())
     tokens.push_back(curToken);
+
   if((int)(tokens[tokens.size()-1][0]) == 13)
 	  tokens.pop_back();
   return tokens;

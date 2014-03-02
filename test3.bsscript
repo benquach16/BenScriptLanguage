@@ -1,10 +1,9 @@
 function foo(int a)
-	#print("helloworld")
-	a+=3
-	bool b
-	#print(a)
+	print("the answer is ")
+	a+=2
+	print(a)
 
 function main()
-	int a = 2
-	foo(a)
+	int b = 2
+	foo(b)
 
