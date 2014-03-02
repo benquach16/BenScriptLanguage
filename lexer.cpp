@@ -251,18 +251,19 @@ void Lexer::AddScope(string input)
 
 void Lexer::EraseScope()
 {
-  int i = variables.size()-1;
-  while(variables.at(i).name != "#" || variables.at(i).name != "-")
-    variables.pop_back();
-
-  if(variables.at(i).name == "#")
+  while(variables.at(variables.size()-1).name != "#" && variables.at(variables.size()-1).name != "-")
   {
-    for(int j = 0; i < variables.size(); j++)
+	  variables.pop_back();
+  }
+
+  if(variables.at(variables.size()-1).name == "#")
+  {
+    for(int j = 0; j < variables.size(); j++)
     {
       if(variables.at(j).name == "#")
       {
-	*(int *)variables.at(j).data = *(int *)variables.at(i).data;
-	break;
+    	  *(int *)variables.at(j).data = *(int *)variables.at(variables.size()-1).data;
+    	  break;
       }
     }
   }
