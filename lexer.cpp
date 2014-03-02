@@ -936,7 +936,10 @@ Variable Lexer::doLine(vector<string> &tokens)
 			tokens.pop_back();
 			tokens.erase(tokens.begin());
 		}
-    
+		if(tokens[0] == "else")
+		{
+			tokens.erase(tokens.begin());
+		}
 		int mid;
     
 		// checks all assignment operators
@@ -1003,8 +1006,19 @@ Variable Lexer::doLine(vector<string> &tokens)
 	}
 	else if (tokens.size() == 1)
 	{
+		if(tokens[0] == "else")
+		{
+			cout << "ELSE FOUND, tokens.size() == 1";
+			currentLine++;
+			GoThroughFunction();
+			Variable var;
+			return var;
+		}
+		else
+		{
+			return FindValue(tokens[0]);
+		}
 		//Find Value should handle the type and value.
-		return FindValue(tokens[0]);
 	}
 	else
 	{
@@ -1039,7 +1053,7 @@ Variable Lexer::UpdateValue(string name, Variable var)
 			i = *(int*)(variables[i].data);
 		}
 	}
-	cerr << "Variable " << name << " not declared in scope." << endl;
+	cerr << "Variable " << name << " not declared in scope. Line " << currentLine << endl;
 	exit(1);
 }
 
@@ -1117,17 +1131,7 @@ Variable& Lexer::FindValue(string name)
 		variables.push_back(ret);
 		return variables[variables.size()-1];
 	}
-
-	else if (name == "true" || name == "false")
-	{
-		Variable ret;
-		ret.type = BOOL;
-		if(name == "true")
-			ret.data = new bool(true);
-		else
-			ret.data = new bool(false);
-	}
-	cerr << "Variable " << name << " not declared in scope." << endl;
+	cerr << "Variable " << name << " not declared in scope. Line " << currentLine << endl;
 	cerr << "Scope: " << endl;
 	for(int i = 0; i < variables.size(); i++)
 	{
