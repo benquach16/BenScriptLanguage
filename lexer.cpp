@@ -772,10 +772,11 @@ Variable Lexer::split(int index, vector<string> tokens)
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
+	//for(int i = 0; i < tokens.size(); i++){cout << "\"" << tokens[i] << "\"" << endl;}cout << "\n\n" << endl;
   if(tokens.size() > 1)
   {
     // shave outer parens
-    if(tokens.at(0) == "(" && tokens.at(tokens.size()-1) == ")" )
+    if(tokens.at(0) == "(" && (GetMatchingParens(0, tokens)==tokens.size()-1))
     {
       tokens.pop_back();
       tokens.erase(tokens.begin());

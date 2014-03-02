@@ -2,4 +2,5 @@ function main()
 	int c
 	int b
 	b = 5
+	b = (b = 5) * (4 + 6)
 	print(b)
