@@ -601,85 +601,65 @@ int Lexer::findOperator8(vector <string> tokens)
 // selects operation and executes left and right
 Variable Lexer::operatorSelect(Variable left, Variable right, string op)
 {
-  switch(op)
-  {
-  case "=":
-    return UpdateValue(left.name, right);
-    break;
 
-  case "+=":
-    return UpdateValue(left.name, OpPlus(left, right));
-    break;
+    if(op == "=")
+        return UpdateValue(left.name, right);
+
+    if(op == "+=")
+        return UpdateValue(left.name, OpPlus(left, right));
     
-  case "-=":
-    return UpdateValue(left.name, OpMinus(left, right));
-    break;
+    if(op == "-=")
+        return UpdateValue(left.name, OpMinus(left, right));
 
-  case "*=":
-    return UpdateValue(left.name, OpMultiply(left, right));
-    break;
+    if(op == "*=")
+        return UpdateValue(left.name, OpMultiply(left, right));
 
-  case "/=":
-    return UpdateValue(left.name, OpDivide(left, right));
-    break;
+    if(op == "/=")
+        return UpdateValue(left.name, OpDivide(left, right));
 
-  case "%=":
-    return UpdateValue(left.name, OpMod(left, right));
-    break;
+    if(op == "%=")
+        return UpdateValue(left.name, OpMod(left, right));
 
-  case "||":
+    if(op == "||")
     return OpOr(left, right);
-    break;
 
-  case "&&":
+    if(op == "&&")
     return OpAnd(left, right);
-    break;
 
-  case "==":
+    if(op == "==")
     return OpCompare(left, right);
-    break;
 
-  case "!=":
+    if(op == "!=")
     return OpInvCompare(left, right);
-    break;
 
-  case "<=":
+    if(op == "<=")
     return OpLessEqual(left, right);
-    break;
 
-  case ">=":
+    if(op == ">=")
     return OpGreatEqual(left, right);
-    break;
 
-  case "<":
+    if(op == "<")
     return OpGreat(left, right);
-    break;
 
-  case ">":
+    if(op == ">")
     return OpLess(left, right);
-    break;
 
-  case "+":
+    if(op == "+")
     return OpPlus(left, right);
-    break;
 
-  case "-":
-    return OpMinus(left, right);
-    break;
+    if(op == "-")
+        return OpMinus(left, right);
 
-  case "*":
-    return OpMultiply(left, right);
-    break;
+    if(op == "*")
+        return OpMultiply(left, right);
 
-  case "/":
-    return OpDivide(left, right);
-    break;
+    if(op ==  "/")
+        return OpDivide(left, right);
 
-  case "%":
-    return OpMod(left, right);
-    break;
+    if(op == "%")
+        return OpMod(left, right);
 
-  }
+  
 	Variable var;
 	return var;
 }
@@ -888,33 +868,33 @@ Variable Lexer::OpMinus(Variable left, Variable right)
   Variable var;
 
   //case float - float
-  if(left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
+  if(left.type.FLOAT && right.type.FLOAT)
   {
-    var.VariableTypes = FLOAT;
+    var.type = FLOAT;
     var.data = new float(0);
     var -> data = *(float*) left.data - *(float *) right.data;
   }
 
   // case int - int
-  else if(left.VariableTypes.INT && right.VariableTypes.INT)
+  else if(left.type.INT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data - *(int *) right.data;
   }
 
   // case int - float
-  else if(left.VariableTypes.INT && right.VariableTypes.FLOAT)
+  else if(left.type.INT && right.type.FLOAT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data - *(int *) right.data;
   }
 
   // case float - int
-  else if(left.VariableTypes.FLOAT && right.VariableTypes.INT)
+  else if(left.type.FLOAT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data - *(int *) right.data;
   }
@@ -933,33 +913,33 @@ Variable Lexer::OpMultiply(Variable left, Variable right)
   Variable var;
 
   //case float - float
-  if(left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
+  if(left.type.FLOAT && right.type.FLOAT)
   {
-    var.VariableTypes = FLOAT;
+    var.type = FLOAT;
     var.data = new float(0);
     var -> data = *(float*) left.data * *(float *) right.data;
   }
 
   // case int - int
-  else if(left.VariableTypes.INT && right.VariableTypes.INT)
+  else if(left.type.INT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data * *(int *) right.data;
   }
 
   // case int - float
-  else if(left.VariableTypes.INT && right.VariableTypes.FLOAT)
+  else if(left.type.INT && right.type.FLOAT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data * *(int *) right.data;
   }
 
   // case float - int
-  else if(left.VariableTypes.FLOAT && right.VariableTypes.INT)
+  else if(left.type.FLOAT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data * *(int *) right.data;
   }
@@ -978,33 +958,33 @@ Variable Lexer::OpDivide(Variable left, Variable right)
   Variable var;
 
   //case float - float
-  if(left.VariableTypes.FLOAT && right.VariableTypes.FLOAT)
+  if(left.type.FLOAT && right.type.FLOAT)
   {
-    var.VariableTypes = FLOAT;
+    var.type = FLOAT;
     var.data = new float(0);
     var -> data = *(float*) left.data / *(float *) right.data;
   }
 
   // case int - int
-  else if(left.VariableTypes.INT && right.VariableTypes.INT)
+  else if(left.type.INT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data / *(int *) right.data;
   }
 
   // case int - float
-  else if(left.VariableTypes.INT && right.VariableTypes.FLOAT)
+  else if(left.type.INT && right.type.FLOAT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data / *(int *) right.data;
   }
 
   // case float - int
-  else if(left.VariableTypes.FLOAT && right.VariableTypes.INT)
+  else if(left.type.FLOAT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data / *(int *) right.data;
   }
@@ -1022,9 +1002,9 @@ Variable Lexer::OpMod(Variable left, Variable right)
 {
   Variable var;
 
-  if(left.VariableTypes.INT && right.VariableTypes.INT)
+  if(left.type.INT && right.type.INT)
   {
-    var.VariableTypes = INT;
+    var.type = INT;
     var.data = new int(0);
     var -> data = *(int *) left.data % *(int *) right.data;
   }
@@ -1040,7 +1020,7 @@ Variable Lexer::OpMod(Variable left, Variable right)
 
 bool Lexer::OpOr(Variable left, Variable right)
 {
-  if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
+  if(left.type.BOOL && right.type.BOOL)
   {
     return *(bool *) left.data || *(bool *) right.data;
   }
@@ -1054,7 +1034,7 @@ bool Lexer::OpOr(Variable left, Variable right)
 
 bool Lexer::OpAnd(Variable left, Variable right)
 {
-  if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
+  if(left.type.BOOL && right.type.BOOL)
   {
     return *(bool *) left.data && *(bool *) right.data;
   }
@@ -1068,7 +1048,7 @@ bool Lexer::OpAnd(Variable left, Variable right)
 
 bool Lexer::OpCompare(Variable left, Variable right)
 {
-  if(left.VariableTypes.BOOL == right.VariableTypes.BOOL)
+  if(left.type.BOOL == right.type.BOOL)
   {
     return *(bool *) left.data == *(bool *) right.data;
   }
@@ -1082,7 +1062,7 @@ bool Lexer::OpCompare(Variable left, Variable right)
 
 bool Lexer::OpInvCompare(Variable left, Variable right)
 {
-  if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
+  if(left.type.BOOL && right.type.BOOL)
   {
     return *(bool *) left.data != *(bool *) right.data;
   }
@@ -1097,16 +1077,16 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 Variable Lexer::OpPlusPlus(Variable var)
 {
   Variable temp;
-  if(var.VariableTypes.INT)
+  if(var.type.INT)
   {
-   temp.variableTypes = INT;
+   temp.type = INT;
     temp.data = new int(1);
     UpdateValue(var.name, OpPlus(var, temp));
   }
 
   if(var.VariablesTypes.FLOAT)
   {
-    temp.VariableTypes = FLOAT;
+    temp.type = FLOAT;
     temp.data = new float(1.0);
     UpdateValue(var.name, OpPlus(var, temp));
   }
@@ -1123,16 +1103,16 @@ Variable Lexer::OpPlusPlus(Variable var)
 Variable Lexer::OpMinusMinus(variable var)
 {
   Variable temp;
-  if(var.VariableTypes.INT)
+  if(var.type.INT)
   {
-    temp.variableTypes = INT;
+    temp.type = INT;
     temp.data = new int(1);
     UpdateValue(var.name, OpMinus(var, temp));
   }
 
   if(var.VariablesTypes.FLOAT)
   {
-    temp.VariableTypes = FLOAT;
+    temp.type = FLOAT;
     temp.data = new float(1.0);
     UpdateValue(var.name, OpMinus(var, temp));
   }
@@ -1149,9 +1129,9 @@ Variable Lexer::OpMinusMinus(variable var)
 Variable Lexer::OpNot(Variable var)
 {
   Variable temp;
-  if(var.VariableTypes.BOOL)
+  if(var.type.BOOL)
   {
-    temp.VariableTypes = var.VariableTypes;
+    temp.type = var.type;
     temp -> data = new bool(!*(bool *) var.data);
   }
 

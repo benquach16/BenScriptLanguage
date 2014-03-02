@@ -63,7 +63,7 @@ public:
 
 	vector<string> TokenizeLine(const string &str);
 
-	/*Variable OpPlus(Variable left, Variable right);
+	Variable OpPlus(Variable left, Variable right);
 	Variable OpMinus(Variable left, Variable right);
 	Variable OpMultiply(Variable left, Variable right);
 	Variable OpDivide(Variable left, Variable right);
@@ -74,8 +74,13 @@ public:
 	bool OpInvCompare(Variable left, Variable right);
 	Variable OpPlusPlus(Variable var);
 	Variable OpMinusMinus(Variable var);
-	Variable OpNot(Variable var);*/
-
+	Variable OpNot(Variable var);
+    OpLessEqual(left, right);
+    OpGreatEqual(left, right);
+    OpGreat(left, right);
+    
+    
+    
 	Variable doLine(vector<string> &tokens);
 	Variable split(int index, vector<string> tokens);
 	Variable operatorSelect(Variable left, Variable right, string op);
