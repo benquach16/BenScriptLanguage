@@ -2,9 +2,7 @@ function foo(int a)
 	int b = 4
 	int a = 5
 	print(a)
-	print(asdfsadfjasdlk)
 function main()
-	bool asdfsadfjasdlk
 	if(true)
 		print("test")
 		int test = 1

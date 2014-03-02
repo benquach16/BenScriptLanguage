@@ -18,6 +18,11 @@ Lexer::Lexer() : currentLine(1)
 
 Lexer::~Lexer()
 {
+	for(unsigned i = 0; i < variables.size(); i++)
+	{
+		delete variables[i].data;
+	}
+	variables.clear();
 }
 
 //Helper Functions
