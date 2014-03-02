@@ -1,6 +1,7 @@
 function main()
 	int a
+	int c
 	int b
-	b = 5
-	a = b + 5
-	print(a)
+	b = 5	
+	b = b + 5 + 3
+	print(b)

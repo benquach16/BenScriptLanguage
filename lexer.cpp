@@ -29,7 +29,12 @@ bool Lexer::MakeVarIfVar( vector<string> &tokens)
     cerr << var.name;
     //~ tokens.erase(tokens.begin());
     //~ doLine(tokens);
+		cerr << "Creating variable: " << var.name << endl;
+
     variables.push_back(var);
+		//cerr << "current scope: " << endl;
+		//for(int i = 0; i < variables.size(); i++)
+		//	cerr << variables[i].name << endl;
     //cout << tokens[1] << endl;
     return true;
 }
@@ -273,8 +278,7 @@ void Lexer::GoThroughFunction(Function func)
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
-		for(int i = 0; i < tokens.size(); i++)
-			cerr << tokens[i] << " ";
+
 		//cerr << currentLine << endl;
 		doLine(tokens);
 		currentLine++;
@@ -772,6 +776,15 @@ Variable Lexer::doLine(vector<string> &tokens)
     if(mid != -1)
       return split(mid, tokens);
     
+		if (tokens[0] == "int" || tokens[0] == "float" || tokens[0] == "string"
+				|| tokens[0] == "bool")
+		{
+			//variable declaration here
+			//so lets interpret
+			MakeVarIfVar(tokens);
+			//cerr <<"ADDING: "<< variables[variables.size()-1].name << endl;
+			return variables[variables.size()-1];
+		}
     //check if its a function
     if(tokens.size() > 3)
     {
@@ -795,14 +808,6 @@ Variable Lexer::doLine(vector<string> &tokens)
 		//Find Value should handle the type and value.
 		return FindValue(tokens[0]);
 	}
-	else if (tokens.size() == 2)
-	{
-		//variable declaration here
-		//so lets interpret
-		MakeVarIfVar(tokens);
-		cerr << variables[variables.size()-1].name;
-		return variables[variables.size()-1];
-	}
 	else
 	{
 		cerr << "Function: DoLine. Syntax error on line: " << currentLine << endl;
@@ -815,8 +820,20 @@ Variable Lexer::UpdateValue(string name, Variable var)
 	{
 		if(variables[i].name == name)
 		{
-			variables[i] = var;
-			return variables[i];
+			if(variables[i].type == var.type)
+			{
+				variables[i].data = var.data;
+				return variables[i];
+			}
+			else
+			{
+				cerr << "Variable 1 : " << *(int*)variables[i].data << endl;
+				cerr << "Variable 2 : " << *(int*)var.data << endl;
+				cerr << "Tried to cast variable of type " << variables[i].type <<
+					" to "<< var.type << " at line " << currentLine << endl;
+				exit(1);
+			}
+			
 		}
 		else if(variables[i].name[0] == '#')
 		{
@@ -880,7 +897,7 @@ Variable& Lexer::FindValue(string name)
 		istringstream iss(name);
 
 		int *t = new int;
-		
+		ret.type = INT;
 		iss >> *t;
 		ret.data = t;
 		variables.push_back(ret);
@@ -895,6 +912,11 @@ Variable& Lexer::FindValue(string name)
 
 	}
 	cerr << "Variable " << name << " not declared in scope." << endl;
+	cerr << "Scope: " << endl;
+	for(int i = 0; i < variables.size(); i++)
+	{
+		cerr << variables[i].name << endl;
+	}
 	exit(1);
 }
 
