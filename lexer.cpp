@@ -601,6 +601,7 @@ int Lexer::findOperator8(vector <string> tokens)
 // selects operation and executes left and right
 Variable Lexer::operatorSelect(Variable left, Variable right, string op)
 {
+	Variable var; 
 
     if(op == "=")
         return UpdateValue(left.name, right);
@@ -620,32 +621,8 @@ Variable Lexer::operatorSelect(Variable left, Variable right, string op)
     if(op == "%=")
         return UpdateValue(left.name, OpMod(left, right));
 
-    if(op == "||")
-    return OpOr(left, right);
-
-    if(op == "&&")
-    return OpAnd(left, right);
-
-    if(op == "==")
-    return OpCompare(left, right);
-
-    if(op == "!=")
-    return OpInvCompare(left, right);
-
-    if(op == "<=")
-    return OpLessEqual(left, right);
-
-    if(op == ">=")
-    return OpGreatEqual(left, right);
-
-    if(op == "<")
-    return OpGreat(left, right);
-
-    if(op == ">")
-    return OpLess(left, right);
-
     if(op == "+")
-    return OpPlus(left, right);
+		return OpPlus(left, right);
 
     if(op == "-")
         return OpMinus(left, right);
@@ -656,12 +633,70 @@ Variable Lexer::operatorSelect(Variable left, Variable right, string op)
     if(op ==  "/")
         return OpDivide(left, right);
 
-    if(op == "%")
-        return OpMod(left, right);
+	if (op == "%")
+		return OpMod(left, right);
+
+	else if (op == ">")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpGreat(left, right));
+		return var;
+	}
+		 
+
+	else if (op == "<")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpLess(left, right));
+		return var;
+	}
+
+	else if (op == ">=")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpGreatEqual(left, right));
+		return var;
+	}
+
+	else if (op == "<=")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpLessEqual(left, right));
+		return var;
+	}
+
+	else if (op == "==")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpCompare(left, right));
+		return var;
+	}
+
+	else if (op == "!=")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpInvCompare(left, right));
+		return var;
+	}
+
+	else if (op == "&&")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpAnd(left, right));
+		return var;
+	}
+
+	else if (op == "||")
+	{
+		var.type = BOOL;
+		var.data = new bool(OpOr(left, right));
+		return var;
+	}
+
 
   
-	Variable var;
-	return var;
+	Variable trash;
+	return trash;
 }
 
 // recursively separates tokens into operators
@@ -1018,62 +1053,6 @@ Variable Lexer::OpMod(Variable left, Variable right)
   return var;
 }
 
-bool Lexer::OpOr(Variable left, Variable right)
-{
-  if(left.type.BOOL && right.type.BOOL)
-  {
-    return *(bool *) left.data || *(bool *) right.data;
-  }
-
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
-}
-
-bool Lexer::OpAnd(Variable left, Variable right)
-{
-  if(left.type.BOOL && right.type.BOOL)
-  {
-    return *(bool *) left.data && *(bool *) right.data;
-  }
-
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
-}
-
-bool Lexer::OpCompare(Variable left, Variable right)
-{
-  if(left.type.BOOL == right.type.BOOL)
-  {
-    return *(bool *) left.data == *(bool *) right.data;
-  }
-
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
-}
-
-bool Lexer::OpInvCompare(Variable left, Variable right)
-{
-  if(left.type.BOOL && right.type.BOOL)
-  {
-    return *(bool *) left.data != *(bool *) right.data;
-  }
-
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
-}
-
 Variable Lexer::OpPlusPlus(Variable var)
 {
   Variable temp;
@@ -1141,14 +1120,6 @@ Variable Lexer::OpNot(Variable var)
     exit(1);
   }
 }
-
-// add
-
-// float and int returns int
-// string + int = concatonates 
-// int + string = concatonates 
-// bool + string = "true" + concatonate 
-// bool + int add 1 if true
 
 Variable Lexer::OpPlus(Variable left, Variable right)
 {
@@ -1301,5 +1272,61 @@ bool Lexer::OpGreatEqual(Variable left, Variable right)
 
 	cerr << "Function: GreaterThanOrEqualOp. Line Number: " << numemberLine << "Not right type to compare" << endl;
 	exit(1);
+}
+
+bool Lexer::OpOr(Variable left, Variable right)
+{
+	if (left.type.BOOL && right.type.BOOL)
+	{
+		return *(bool *)left.data || *(bool *)right.data;
+	}
+
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
+}
+
+bool Lexer::OpAnd(Variable left, Variable right)
+{
+	if (left.type.BOOL && right.type.BOOL)
+	{
+		return *(bool *)left.data && *(bool *)right.data;
+	}
+
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
+}
+
+bool Lexer::OpCompare(Variable left, Variable right)
+{
+	if (left.type.BOOL == right.type.BOOL)
+	{
+		return *(bool *)left.data == *(bool *)right.data;
+	}
+
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
+}
+
+bool Lexer::OpInvCompare(Variable left, Variable right)
+{
+	if (left.type.BOOL && right.type.BOOL)
+	{
+		return *(bool *)left.data != *(bool *)right.data;
+	}
+
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 }
 
