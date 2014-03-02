@@ -352,8 +352,10 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 			}
 		  	if(!loopBroken)
 		  	{
+
 					for(int k = 0; k < arguments.size(); k++)
 					{
+						arguments[k].name = vectorOfFunctions[i].functionArguments[k].name;
 						variables.push_back(arguments[k]);
 					}
 				Variable ret;
