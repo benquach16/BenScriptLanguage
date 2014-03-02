@@ -291,7 +291,6 @@ void Lexer::GoThroughFunction(Function func)
 
 	int tabCount = numTabs(fileLines[currentLine])-1;
 	
-	
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
@@ -1468,19 +1467,29 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 
 int Lexer::numTabs(string line)
 {
-    int num; 
-    bool hellnah = false;
+    int num = 0; 
     for(int i = 0; i < line.size(); i++)
     {
         if(line[i] == '\t')
-        {
             num++;
-            hellnah = true;
-        }
         else
-            if(hellnah)
-                return num;
+            return num;
     }
-    
     return num;
+}
+
+int Lexer::FindPCBack(bool elseOk)
+{
+	int tabCount = numTabs(fileLines[currentLine]);
+	for(int i = currentLine; i<fileLines.size(); i++)
+	{
+		int tabsOfLine = numTabs(fileLines[i]);
+		if(fileLines[i].size() >= tabsOfLine + 4 && fileLines[i].substr(tabsOfLine, 4) == "else")
+		{
+			if(elseOk)
+				return i;
+		}
+		else if(tabsOfLine <= tabCount)
+			return i;
+	}
 }

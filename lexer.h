@@ -93,6 +93,7 @@ public:
 	int findOperator6(vector<string> tokens);
 	int findOperator7(vector<string> tokens);
 	int findOperator8(vector<string> tokens);
+	int FindPCBack(bool elseOk);
 	Variable doFunction(string funcName, vector<Variable> &arguments);
 	void GoThroughFunction(Function func);
  	void ChangeFunction(unsigned vectorIndex);
