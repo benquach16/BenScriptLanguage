@@ -75,9 +75,10 @@ public:
 	Variable OpPlusPlus(Variable var);
 	Variable OpMinusMinus(Variable var);
 	Variable OpNot(Variable var);
-    OpLessEqual(left, right);
-    OpGreatEqual(left, right);
-    OpGreat(left, right);
+    bool OpLess(Variable left,Variable right);
+    bool OpLessEqual(Variable left,Variable right);
+    bool OpGreatEqual(Variable left,Variable right);
+    bool OpGreat(Variable left,Variable right);
     
     
     
