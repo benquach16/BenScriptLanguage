@@ -72,8 +72,8 @@ public:
 	bool OpAnd(Variable left, Variable right);
 	bool OpCompare(Variable left, Variable right);
 	bool OpInvCompare(Variable left, Variable right);
-	Variable OpPlusPlus(Variable var);
-	Variable OpMinusMinus(Variable var);
+	Variable OpPlusPlus(Variable var, bool isLeft);
+	Variable OpMinusMinus(Variable var, bool isLeft);
 	Variable OpNot(Variable var);
     bool OpLess(Variable left,Variable right);
     bool OpLessEqual(Variable left,Variable right);

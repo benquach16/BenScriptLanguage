@@ -610,34 +610,38 @@ Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTo
 	
 	if (op == "++" || op == "--" || op == "!")
 	{
-		Variable send;
-		if(leftTokens.size() == 0)
-		{
-			if(rightTokens.size() == 0)
-			{
-				cerr << "Unary Operator "<< op <<" has no arguments on line " << currentLine <<".\n";
-				exit(1);
-			}
-			send = doLine(rightTokens);
-		}else if(rightTokens.size() == 0)
-		{
-			send = doLine(leftTokens);
-		}else{
-			cerr << "Operator "<< op <<" has two variables on line " << currentLine <<".\n";
-			exit(1);
-		}
-		if(op == "++")
-		{
-			//opPlusPlus(send);
-		}
-		else if(op == "--")
-		{
-			//opMinusMinus(send);
-		}
-		else
-		{
-			//opNot(send);
-		}
+	  bool isLeft = false;
+	  Variable send;
+	  if(leftTokens.size() == 0)
+	  {
+	    if(rightTokens.size() == 0)
+	    {
+	      cerr << "Unary Operator "<< op <<" has no arguments on line " << currentLine <<".\n";
+	      exit(1);
+	    }
+	    send = doLine(rightTokens);
+	  }else if(rightTokens.size() == 0)
+	  {
+	    send = doLine(leftTokens);
+	    isLeft = true;
+	  }else{
+	    cerr << "Operator "<< op <<" has two variables on line " << currentLine <<".\n";
+	    exit(1);
+	  }
+	  if(op == "++")
+	  {
+	    OpPlusPlus(send, isLeft);		  
+	  }
+	  
+	  else if(op == "--")
+	  {
+	    OpMinusMinus(send, isLeft);
+	  }
+	  
+	  else
+	  {
+	    OpNot(send);
+	  }
 	}
 	
 	Variable left = doLine(leftTokens);
@@ -1098,21 +1102,45 @@ Variable Lexer::OpMod(Variable left, Variable right)
   return var;
 }
 
-Variable Lexer::OpPlusPlus(Variable var)
+Variable Lexer::OpPlusPlus(Variable var, bool isLeft)
 {
   Variable temp;
+
   if(var.type == INT)
   {
-   temp.type = INT;
+    temp.type = INT;
     temp.data = new int(1);
-    UpdateValue(var.name, OpPlus(var, temp));
+    if(isLeft)
+    {
+      temp = OpPlus(var, temp);
+      UpdateValue(var.name, temp);
+      return temp;
+    }
+    
+    else
+    {
+      UpdateValue(var.name, OpPlus(var, temp));
+      return var;
+    }
   }
 
   if(var.type == FLOAT)
   {
     temp.type = FLOAT;
     temp.data = new float(1.0);
-    UpdateValue(var.name, OpPlus(var, temp));
+
+    if(isLeft)
+    {
+      temp = OpPlus(var, temp);
+      UpdateValue(var.name, temp);
+      return temp;
+    }
+    
+    else
+    {
+      UpdateValue(var.name, OpPlus(var, temp));
+      return var;
+    }
   }
 
   else
@@ -1120,25 +1148,46 @@ Variable Lexer::OpPlusPlus(Variable var)
     cerr << "invalid variable type" << endl;
     exit(1);
   }
-
-  return var;
 }
 
-Variable Lexer::OpMinusMinus(Variable var)
+Variable Lexer::OpMinusMinus(Variable var, bool isLeft)
 {
   Variable temp;
   if(var.type == INT)
   {
     temp.type = INT;
-    temp.data = new int(1);
-    UpdateValue(var.name, OpMinus(var, temp));
+    temp.data = new int(-1);
+    if(isLeft)
+    {
+      temp = OpPlus(var, temp);
+      UpdateValue(var.name, temp);
+      return temp;
+    }
+    
+    else
+    {
+      UpdateValue(var.name, OpPlus(var, temp));
+      return var;
+    }
   }
 
   if(var.type == FLOAT)
   {
     temp.type = FLOAT;
     temp.data = new float(1.0);
-    UpdateValue(var.name, OpMinus(var, temp));
+
+    if(isLeft)
+    {
+      temp = OpPlus(var, temp);
+      UpdateValue(var.name, temp);
+      return temp;
+    }
+    
+    else
+    {
+      UpdateValue(var.name, OpPlus(var, temp));
+      return var;
+    }
   }
 
   else
@@ -1146,8 +1195,6 @@ Variable Lexer::OpMinusMinus(Variable var)
     cerr << "invalid variable type" << endl;
     exit(1);
   }
-
-  return var;
 }
 
 Variable Lexer::OpNot(Variable var)
@@ -1164,6 +1211,7 @@ Variable Lexer::OpNot(Variable var)
     cerr << "invalid variable type" << endl;
     exit(1);
   }
+  return temp;
 }
 
 Variable Lexer::OpPlus(Variable left, Variable right)
