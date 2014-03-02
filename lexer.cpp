@@ -26,11 +26,11 @@ bool Lexer::MakeVarIfVar( vector<string> &tokens)
         var.type = STRING;
     else
         return false;  
-    
+    cerr << var.name;
     //~ tokens.erase(tokens.begin());
     //~ doLine(tokens);
     variables.push_back(var);
-    cout << tokens[1] << endl;
+    //cout << tokens[1] << endl;
     return true;
 }
 
@@ -273,7 +273,8 @@ void Lexer::GoThroughFunction(Function func)
 	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
-
+		for(int i = 0; i < tokens.size(); i++)
+			cerr << tokens[i] << " ";
 		//cerr << currentLine << endl;
 		doLine(tokens);
 		currentLine++;
@@ -778,6 +779,14 @@ Variable Lexer::doLine(vector<string> &tokens)
 	{
 		//Find Value should handle the type and value.
 		return FindValue(tokens[0]);
+	}
+	else if (tokens.size() == 2)
+	{
+		//variable declaration here
+		//so lets interpret
+		MakeVarIfVar(tokens);
+		cerr << variables[variables.size()-1].name;
+		return variables[variables.size()-1];
 	}
 	else
 	{
