@@ -84,7 +84,7 @@ public:
     
 	Variable doLine(vector<string> &tokens);
 	Variable split(int index, vector<string> tokens);
-	Variable operatorSelect(Variable left, Variable right, string op);
+	Variable operatorSelect(vector<string> leftTokens, vector<string> rightTokens, string op);
 	int findOperator1(vector<string> tokens);
 	int findOperator2(vector<string> tokens);
 	int findOperator3(vector<string> tokens);

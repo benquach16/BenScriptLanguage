@@ -603,8 +603,10 @@ int Lexer::findOperator8(vector <string> tokens)
 }
 
 // selects operation and executes left and right
-Variable Lexer::operatorSelect(Variable left, Variable right, string op)
+Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTokens, string op)
 {
+	Variable left = doLine(leftTokens);
+	Variable right = doLine(rightTokens);
 	Variable var; 
 
     if(op == "=")
@@ -723,10 +725,8 @@ Variable Lexer::split(int index, vector<string> tokens)
 	cout << rightTokens.at(i) << " ";
   cout << endl;
 	*/
-  Variable left = doLine(leftTokens);
-  Variable right = doLine(rightTokens);
 
-  return operatorSelect(left, right, tokens[index]);
+  return operatorSelect(leftTokens, rightTokens, tokens[index]);
 }
 
 Variable Lexer::doLine(vector<string> &tokens)
