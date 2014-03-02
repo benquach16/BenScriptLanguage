@@ -8,7 +8,7 @@ Lexer::Lexer() : currentLine(1)
 
   Variable temp2;
   temp2.type = BOOL;
-  temp2.name = "true";
+  temp2.name = "false";
   temp2.data = new bool(false);
   
   variables.push_back(temp);
