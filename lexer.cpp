@@ -2,18 +2,18 @@
 Lexer::Lexer() : currentLine(1)
 {
 	//amazing.
-  Variable temp;
-  temp.type = BOOL;
-  temp.name = "true";
-  temp.data = new bool(true);
+	Variable temp;
+	temp.type = BOOL;
+	temp.name = "true";
+	temp.data = new bool(true);
 
-  Variable temp2;
-  temp2.type = BOOL;
-  temp2.name = "false";
-  temp2.data = new bool(false);
+	Variable temp2;
+	temp2.type = BOOL;
+	temp2.name = "false";
+	temp2.data = new bool(false);
   
-  variables.push_back(temp);
-  variables.push_back(temp2);
+	variables.push_back(temp);
+	variables.push_back(temp2);
 }
 
 Lexer::~Lexer()
@@ -24,54 +24,54 @@ Lexer::~Lexer()
 bool Lexer::MakeVarIfVar(vector<string> &tokens)
 {
     
-    Variable var;
-    var.name = tokens[1];
+	Variable var;
+	var.name = tokens[1];
     
-    if ( tokens[0] == "int" )
-        var.type = INT;
-    else if (tokens[0] == "bool")
-        var.type = BOOL;
-    else if (tokens[0] == "float")
-        var.type = FLOAT;
-    else if (tokens[0] == "string")
-        var.type = STRING;
-    else
-        return false;
-    if(tokens.size() > 2)
-    {
-    	tokens.erase(tokens.begin());
-    	doLine(tokens);
-    }
+	if ( tokens[0] == "int" )
+		var.type = INT;
+	else if (tokens[0] == "bool")
+		var.type = BOOL;
+	else if (tokens[0] == "float")
+		var.type = FLOAT;
+	else if (tokens[0] == "string")
+		var.type = STRING;
+	else
+		return false;
+	if(tokens.size() > 2)
+	{
+		tokens.erase(tokens.begin());
+		doLine(tokens);
+	}
 
-    variables.push_back(var);
-		//cerr << "current scope: " << endl;
-		//for(int i = 0; i < variables.size(); i++)
-		//	cerr << variables[i].name << endl;
-    //cout << tokens[1] << endl;
-    return true;
+	variables.push_back(var);
+	//cerr << "current scope: " << endl;
+	//for(int i = 0; i < variables.size(); i++)
+	//	cerr << variables[i].name << endl;
+	//cout << tokens[1] << endl;
+	return true;
 }
 
 //DYLANS FUNCTION
 void Lexer::ReadFile(char *filePath)
 {
-  // checks if file exists
-  ifstream file;
+	// checks if file exists
+	ifstream file;
 	file.open(filePath);
   
-  if(!file.is_open())
+	if(!file.is_open())
 	{
 		cerr << "File doesn't exist" << endl;
 		exit(1);
 	}
 
-  string line;
+	string line;
 
-  while(getline(file, line))
+	while(getline(file, line))
 	{
 		fileLines.push_back(line);
 	}
 
-  file.close();
+	file.close();
 }
 
 //SULTANS FUNCTION
@@ -98,7 +98,7 @@ void Lexer::FirstPass()
 {
 	for(int i = 0; i < fileLines.size(); i++ )
 	{
-        //cout << "Line: " << i+1 << " First char: "<< fileLines[i][0]  << ":";
+		//cout << "Line: " << i+1 << " First char: "<< fileLines[i][0]  << ":";
 		//Ignore all lines that begin with whitespace or are commented
 		if(fileLines[i][0] == '\t' || fileLines[i][0] == ' ' || fileLines[i][0] == '#' || fileLines[i].size() == 0)
 		{
@@ -142,11 +142,11 @@ void Lexer::FirstPass()
 						//exit(1);
 					}
                     
-                    if(varTypeAssigned && nameAssigned)// if both are true, then variable has been created
-                    {
-                    	newFunc.functionArguments.push_back(arg);
-                    }
-		    //cerr << newFunc.name << endl;
+					if(varTypeAssigned && nameAssigned)// if both are true, then variable has been created
+					{
+						newFunc.functionArguments.push_back(arg);
+					}
+					//cerr << newFunc.name << endl;
 					vectorOfFunctions.push_back(newFunc);
                     
 					//cout << "Function pushed.\n";
@@ -192,14 +192,14 @@ void Lexer::FirstPass()
 			}
             
 		}
-        else
-        {
-            // << "GVAR";
-            //vector<string> tokens = TokenizeLine(fileLines[i]);
-            //cout << tokens[1] << endl;
-            //MakeVarIfVar(tokens);
-            //cout << fileLines[i] << endl;
-        }
+		else
+		{
+			// << "GVAR";
+			//vector<string> tokens = TokenizeLine(fileLines[i]);
+			//cout << tokens[1] << endl;
+			//MakeVarIfVar(tokens);
+			//cout << fileLines[i] << endl;
+		}
 	}
 	for(int j = 0; j<vectorOfFunctions.size(); j++)
 	{
@@ -229,8 +229,8 @@ void Lexer::AddScope(string input)
 		{
 			if(variables.at(i).name == "#")
 			{
-			  firstHash = i;
-			  break;
+				firstHash = i;
+				break;
 			}
 		}
 	
@@ -251,113 +251,113 @@ void Lexer::AddScope(string input)
 
 void Lexer::EraseScope()
 {
-  while(variables.at(variables.size()-1).name != "#" && variables.at(variables.size()-1).name != "-")
-  {
-	  variables.pop_back();
-  }
+	while(variables.at(variables.size()-1).name != "#" && variables.at(variables.size()-1).name != "-")
+	{
+		variables.pop_back();
+	}
 
-  if(variables.at(variables.size()-1).name == "#")
-  {
-    for(int j = 0; j < variables.size(); j++)
-    {
-      if(variables.at(j).name == "#")
-      {
-    	  *(int *)variables.at(j).data = *(int *)variables.at(variables.size()-1).data;
-    	  break;
-      }
-    }
-  }
-  variables.pop_back();
+	if(variables.at(variables.size()-1).name == "#")
+	{
+		for(int j = 0; j < variables.size(); j++)
+		{
+			if(variables.at(j).name == "#")
+			{
+				*(int *)variables.at(j).data = *(int *)variables.at(variables.size()-1).data;
+				break;
+			}
+		}
+	}
+	variables.pop_back();
 }
 
 Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 {
-  //set return value to null
-  if(funcName != "print")
-  {
-    if(funcName == "if" || funcName == "while" || funcName == "for" || funcName =="else")
-    {
-        AddScope("-");
-    }
-    else
-    {
-        AddScope("#");
-    }
-  }
+	//set return value to null
+	if(funcName != "print")
+	{
+		if(funcName == "if" || funcName == "while" || funcName == "for" || funcName =="else")
+		{
+			AddScope("-");
+		}
+		else
+		{
+			AddScope("#");
+		}
+	}
 
-  if(funcName == "print")
-  {
-    for (unsigned i = 0; i < arguments.size(); i++)
-    {
-      if(arguments[i].type == INT)
-      {
-	cout << (*(int*)arguments[i].data) << endl;
-      }
-      else if(arguments[i].type == STRING)
-      {
-	cout << (char*)arguments[i].data << endl;
-      }
-      else if(arguments[i].type == FLOAT)
-      {
-	cout << *(float*)arguments[i].data << endl;
-      }
-      else
-      {
-	if(*(bool*)arguments[i].data)
-	  cout << "true" << endl;
-	else
-	  cout << "false" << endl;
-      }
-    }
-    if(arguments.size() == 0)
-    {
-      cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
-      exit(1);
-    }
-    return arguments[0];
-  }
-  else if(funcName == "if")
-  {
-    if(arguments[0].type != BOOL || arguments.size() != 1)
-    {
-      cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
-      exit(1);
-    }
-    int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
-    if(*(bool*)arguments[0].data)
-    {
-      currentLine++;
-      GoThroughFunction();
-    }
-    currentLine = PCBack;
-    if(arguments.size() == 0)
-    {
-      cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
-      exit(1);
-    }
-    return arguments[0];
-  }
+	if(funcName == "print")
+	{
+		for (unsigned i = 0; i < arguments.size(); i++)
+		{
+			if(arguments[i].type == INT)
+			{
+				cout << (*(int*)arguments[i].data) << endl;
+			}
+			else if(arguments[i].type == STRING)
+			{
+				cout << (char*)arguments[i].data << endl;
+			}
+			else if(arguments[i].type == FLOAT)
+			{
+				cout << *(float*)arguments[i].data << endl;
+			}
+			else
+			{
+				if(*(bool*)arguments[i].data)
+					cout << "true" << endl;
+				else
+					cout << "false" << endl;
+			}
+		}
+		if(arguments.size() == 0)
+		{
+			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+			exit(1);
+		}
+		return arguments[0];
+	}
+	else if(funcName == "if")
+	{
+		if(arguments[0].type != BOOL || arguments.size() != 1)
+		{
+			cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
+			exit(1);
+		}
+		int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
+		if(*(bool*)arguments[0].data)
+		{
+			currentLine++;
+			GoThroughFunction();
+		}
+		currentLine = PCBack;
+		if(arguments.size() == 0)
+		{
+			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+			exit(1);
+		}
+		return arguments[0];
+	}
 	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
-	  if(funcName == vectorOfFunctions[i].name && vectorOfFunctions[i].functionArguments.size() == arguments.size())
-	  {
+		if(funcName == vectorOfFunctions[i].name && vectorOfFunctions[i].functionArguments.size() == arguments.size())
+		{
 			bool loopBroken = false;
 			for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
 			{
-			  if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
-			  {
-				  loopBroken = true;
-				  break;
-			  }
+				if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
+				{
+					loopBroken = true;
+					break;
+				}
 			}
-		  	if(!loopBroken)
-		  	{
+			if(!loopBroken)
+			{
 
-					for(int k = 0; k < arguments.size(); k++)
-					{
-						arguments[k].name = vectorOfFunctions[i].functionArguments[k].name;
-						variables.push_back(arguments[k]);
-					}
+				for(int k = 0; k < arguments.size(); k++)
+				{
+					arguments[k].name = vectorOfFunctions[i].functionArguments[k].name;
+					variables.push_back(arguments[k]);
+				}
 				Variable ret;
 				ret.data = 0;			
 				//save the program counter temporarily
@@ -366,7 +366,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 				//reset
 				currentLine = prevCurrentLine;
 				return ret;
-		    }
+			}
 		}
 	}
 	cerr << "No function call found for " << funcName << endl;
@@ -431,7 +431,7 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 	//cout << "Commas: " << (commas.size()-1) << endl;
 	if(commas.size()>=1 && tokens.size() > leftParens+1)
 	{
-	  //cout << "First Arg." << endl;
+		//cout << "First Arg." << endl;
 		for(int i = leftParens+1; i<commas[0]; i++)
 		{
 			convertTokens.push_back(tokens[i]);
@@ -461,262 +461,262 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 
 vector<string> Lexer::TokenizeLine(const string &str)
 {
-  vector<string> tokens;
+	vector<string> tokens;
 
-  int i = 0;
+	int i = 0;
 
-  string curToken;
+	string curToken;
 
-  bool quote = false;
+	bool quote = false;
 
-  // traverse line end if get to end or hit comment
-  while(i != str.size() && str[i] != '#' && str[i] != 13)
-  {
+	// traverse line end if get to end or hit comment
+	while(i != str.size() && str[i] != '#' && str[i] != 13)
+	{
 		if(str[i] == '\t' && !quote)
 		{
 			i++;
 			continue;
 		}
-    //if hit function operators push them back
-    if(str[i] == '(' || str[i] == ')' || 
-       str[i] == ',' || str[i] == '?' || str[i] == ':')
-    {
-      if(curToken.size() > 0)
-      {
-    	  tokens.push_back(curToken);
-    	  curToken = "";
-      }
+		//if hit function operators push them back
+		if(str[i] == '(' || str[i] == ')' || 
+		   str[i] == ',' || str[i] == '?' || str[i] == ':')
+		{
+			if(curToken.size() > 0)
+			{
+				tokens.push_back(curToken);
+				curToken = "";
+			}
 
-      tokens.push_back(str.substr(i,1));
-    }
+			tokens.push_back(str.substr(i,1));
+		}
 
-    // if hit math operators push them back
-    else if(str[i] == '=' || str[i] == '+' || str[i] == '-' ||
-	    str[i] == '/' || str[i] == '*' || str[i] == '>' ||
-	    str[i] == '<')
-    {
-      if(curToken.size() > 0)
-      {
-	tokens.push_back(curToken);
-	curToken = "";
-      }
+		// if hit math operators push them back
+		else if(str[i] == '=' || str[i] == '+' || str[i] == '-' ||
+				str[i] == '/' || str[i] == '*' || str[i] == '>' ||
+				str[i] == '<')
+		{
+			if(curToken.size() > 0)
+			{
+				tokens.push_back(curToken);
+				curToken = "";
+			}
 
-      // if += ++ etc
-      if(str.size() > i + 1 && (str[i+1] == '=') || (str[i+1] == '+') ||
-	 (str[i+1] == '-') && str[i] == str[i+1])
-      {
-	tokens.push_back(str.substr(i,2));
-	i++;
-      }
+			// if += ++ etc
+			if(str.size() > i + 1 && (str[i+1] == '=') || (str[i+1] == '+') ||
+			   (str[i+1] == '-') && str[i] == str[i+1])
+			{
+				tokens.push_back(str.substr(i,2));
+				i++;
+			}
 
-      else
-	tokens.push_back(str.substr(i,1));
-    }
+			else
+				tokens.push_back(str.substr(i,1));
+		}
 
-    // if or and
-    else if((str[i] == '|' || str[i] == '&')  && (str.size() > i+1 && str[i+1] == str[i]))
-    {
-      if(curToken.size() > 0)
-      {
-	tokens.push_back(curToken);
-	curToken = "";
-      }
+		// if or and
+		else if((str[i] == '|' || str[i] == '&')  && (str.size() > i+1 && str[i+1] == str[i]))
+		{
+			if(curToken.size() > 0)
+			{
+				tokens.push_back(curToken);
+				curToken = "";
+			}
 
-      tokens.push_back(str.substr(i,2));
-      i++;
-    }
+			tokens.push_back(str.substr(i,2));
+			i++;
+		}
 
-    else if(str[i] == '\"')
-    {
-      if(quote && curToken.size() > 0 && str[i-1] != '\\')
-      {
-	curToken+= str[i];
-	tokens.push_back(curToken);
-	curToken = "";
-      }
+		else if(str[i] == '\"')
+		{
+			if(quote && curToken.size() > 0 && str[i-1] != '\\')
+			{
+				curToken+= str[i];
+				tokens.push_back(curToken);
+				curToken = "";
+			}
 
-      if(!quote)
-      {
-	curToken+= str[i];
-	if(!quote && str[i-1] == '\\')
-	{
-	  cerr << "escaped \" outside of string literal" << endl;
-	  exit(1);
-	}
-	quote = true;
-      }
-    }
+			if(!quote)
+			{
+				curToken+= str[i];
+				if(!quote && str[i-1] == '\\')
+				{
+					cerr << "escaped \" outside of string literal" << endl;
+					exit(1);
+				}
+				quote = true;
+			}
+		}
 
-    // if hit space reset curToken
-    else if(str[i] == ' ' && !quote)
-    {
-      if(curToken.size() > 0)
-      {
-	tokens.push_back(curToken);
-	curToken = "";
-      }
-    }
+		// if hit space reset curToken
+		else if(str[i] == ' ' && !quote)
+		{
+			if(curToken.size() > 0)
+			{
+				tokens.push_back(curToken);
+				curToken = "";
+			}
+		}
       
-    // if nothing add it to curToken
-    else
-      curToken += str[i];
+		// if nothing add it to curToken
+		else
+			curToken += str[i];
 
-    i++;
-  }
+		i++;
+	}
 
-  if(!curToken.empty())
-    tokens.push_back(curToken);
+	if(!curToken.empty())
+		tokens.push_back(curToken);
 
-  if((int)(tokens[tokens.size()-1][0]) == 13)
-	  tokens.pop_back();
-  return tokens;
+	if((int)(tokens[tokens.size()-1][0]) == 13)
+		tokens.pop_back();
+	return tokens;
 }
 
 int Lexer::findOperator1(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    //cerr << "parens: " << parens << endl;
+		//cerr << "parens: " << parens << endl;
 
-    if(parens == 0 && (tokens.at(i) == "+=" || tokens.at(i) == "?" ||
-		       tokens.at(i) == "-=" || tokens.at(i) == "*=" || tokens.at(i) == "/=" ||
-		       tokens.at(i) == "=" ))
-      return i;
-  }
-  return -1;
+		if(parens == 0 && (tokens.at(i) == "+=" || tokens.at(i) == "?" ||
+						   tokens.at(i) == "-=" || tokens.at(i) == "*=" || tokens.at(i) == "/=" ||
+						   tokens.at(i) == "=" ))
+			return i;
+	}
+	return -1;
 }
 
 // checks or
 int Lexer::findOperator2(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && tokens.at(i) == "||")
-      return i;
-  }
-  return -1;
+		if(parens == 0 && tokens.at(i) == "||")
+			return i;
+	}
+	return -1;
 }
 
 // checks and
 int Lexer::findOperator3(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && tokens.at(i) == "&&")
-      return i;
-  }
-  return -1;
+		if(parens == 0 && tokens.at(i) == "&&")
+			return i;
+	}
+	return -1;
 }
 
 // checks equality comparison
 int Lexer::findOperator4(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && (tokens.at(i) == "==" || tokens.at(i) == "!="))
-      return i;
-  }
-  return -1;
+		if(parens == 0 && (tokens.at(i) == "==" || tokens.at(i) == "!="))
+			return i;
+	}
+	return -1;
 }
 
 // checks less than or greater than comparisons
 int Lexer::findOperator5(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
-      tokens.at(i) == "<" || tokens.at(i) == ">")
-      return i;
-  }
-  return -1;
+		if(parens == 0 && tokens.at(i) == "<=" || tokens.at(i) == ">=" ||
+		   tokens.at(i) == "<" || tokens.at(i) == ">")
+			return i;
+	}
+	return -1;
 }
 
 // checks add and subtract
 int Lexer::findOperator6(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && (tokens.at(i) == "+" || tokens.at(i) == "-"))
-      return i;
-  }
-  return -1;
+		if(parens == 0 && (tokens.at(i) == "+" || tokens.at(i) == "-"))
+			return i;
+	}
+	return -1;
 }
 
 // checks multiply and divide
 int Lexer::findOperator7(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && (tokens.at(i) == "*" || tokens.at(i) == "/" || tokens.at(i) == "%" ))
-      return i;
-  }
-  return -1;
+		if(parens == 0 && (tokens.at(i) == "*" || tokens.at(i) == "/" || tokens.at(i) == "%" ))
+			return i;
+	}
+	return -1;
 }
 // checks unary operators
 int Lexer::findOperator8(vector <string> tokens)
 {
-  int parens = 0;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-    if(tokens.at(i) == "(")
-      parens++;
+	int parens = 0;
+	for(int i = 0; i < tokens.size(); i++)
+	{
+		if(tokens.at(i) == "(")
+			parens++;
 
-    else if(tokens.at(i) == ")")
-      parens--;
+		else if(tokens.at(i) == ")")
+			parens--;
 
-    if(parens == 0 && (tokens.at(i) == "++" || tokens.at(i) == "--" || tokens.at(i) == "!"))
-      return i;
-  }
-  return -1;
+		if(parens == 0 && (tokens.at(i) == "++" || tokens.at(i) == "--" || tokens.at(i) == "!"))
+			return i;
+	}
+	return -1;
 }
 
 // selects operation and executes left and right
@@ -727,72 +727,72 @@ Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTo
 	
 	if (op == "++" || op == "--" || op == "!")
 	{
-	  bool isLeft = false;
-	  Variable send;
-	  if(leftTokens.size() == 0)
-	  {
-	    if(rightTokens.size() == 0)
-	    {
-	      cerr << "Unary Operator "<< op <<" has no arguments on line " << currentLine <<".\n";
-	      exit(1);
-	    }
-	    send = doLine(rightTokens);
-	  }else if(rightTokens.size() == 0)
-	  {
-	    send = doLine(leftTokens);
-	    isLeft = true;
-	  }else{
-	    cerr << "Operator "<< op <<" has two variables on line " << currentLine <<".\n";
-	    exit(1);
-	  }
-	  if(op == "++")
-	  {
-	    OpPlusPlus(send, isLeft);		  
-	  }
+		bool isLeft = false;
+		Variable send;
+		if(leftTokens.size() == 0)
+		{
+			if(rightTokens.size() == 0)
+			{
+				cerr << "Unary Operator "<< op <<" has no arguments on line " << currentLine <<".\n";
+				exit(1);
+			}
+			send = doLine(rightTokens);
+		}else if(rightTokens.size() == 0)
+		{
+			send = doLine(leftTokens);
+			isLeft = true;
+		}else{
+			cerr << "Operator "<< op <<" has two variables on line " << currentLine <<".\n";
+			exit(1);
+		}
+		if(op == "++")
+		{
+			OpPlusPlus(send, isLeft);		  
+		}
 	  
-	  else if(op == "--")
-	  {
-	    OpMinusMinus(send, isLeft);
-	  }
+		else if(op == "--")
+		{
+			OpMinusMinus(send, isLeft);
+		}
 	  
-	  else
-	  {
-	    OpNot(send);
-	  }
+		else
+		{
+			OpNot(send);
+		}
 	}
 	
 	Variable left = doLine(leftTokens);
 	Variable right = doLine(rightTokens);
 
-    if(op == "=")
-        return UpdateValue(left.name, right);
+	if(op == "=")
+		return UpdateValue(left.name, right);
 
-    if(op == "+=")
-        return UpdateValue(left.name, OpPlus(left, right));
+	if(op == "+=")
+		return UpdateValue(left.name, OpPlus(left, right));
     
-    if(op == "-=")
-        return UpdateValue(left.name, OpMinus(left, right));
+	if(op == "-=")
+		return UpdateValue(left.name, OpMinus(left, right));
 
-    if(op == "*=")
-        return UpdateValue(left.name, OpMultiply(left, right));
+	if(op == "*=")
+		return UpdateValue(left.name, OpMultiply(left, right));
 
-    if(op == "/=")
-        return UpdateValue(left.name, OpDivide(left, right));
+	if(op == "/=")
+		return UpdateValue(left.name, OpDivide(left, right));
 
-    if(op == "%=")
-        return UpdateValue(left.name, OpMod(left, right));
+	if(op == "%=")
+		return UpdateValue(left.name, OpMod(left, right));
 
-    if(op == "+")
+	if(op == "+")
 		return OpPlus(left, right);
 
-    if(op == "-")
-        return OpMinus(left, right);
+	if(op == "-")
+		return OpMinus(left, right);
 
-    if(op == "*")
-        return OpMultiply(left, right);
+	if(op == "*")
+		return OpMultiply(left, right);
 
-    if(op ==  "/")
-        return OpDivide(left, right);
+	if(op ==  "/")
+		return OpDivide(left, right);
 
 	if (op == "%")
 		return OpMod(left, right);
@@ -862,75 +862,75 @@ Variable Lexer::operatorSelect(vector<string> leftTokens, vector<string> rightTo
 // recursively separates tokens into operators
 Variable Lexer::split(int index, vector<string> tokens)
 {
-  vector<string> leftTokens;
-  vector<string> rightTokens;
-  //allocate to these vectors
-  for(int i = 0; i < index; i++)
-    leftTokens.push_back(tokens.at(i));
+	vector<string> leftTokens;
+	vector<string> rightTokens;
+	//allocate to these vectors
+	for(int i = 0; i < index; i++)
+		leftTokens.push_back(tokens.at(i));
 
-  for(int i = index+1; i < tokens.size(); i++)
-    rightTokens.push_back(tokens.at(i));
+	for(int i = index+1; i < tokens.size(); i++)
+		rightTokens.push_back(tokens.at(i));
 	/*
-  for(int i = 0; i < leftTokens.size(); i++)
-    cout << leftTokens.at(i) << " ";
-  cout << endl;
+	  for(int i = 0; i < leftTokens.size(); i++)
+	  cout << leftTokens.at(i) << " ";
+	  cout << endl;
   
-  for(int i = 0; i < rightTokens.size(); i++)
-	cout << rightTokens.at(i) << " ";
-  cout << endl;
+	  for(int i = 0; i < rightTokens.size(); i++)
+	  cout << rightTokens.at(i) << " ";
+	  cout << endl;
 	*/
 
-  return operatorSelect(leftTokens, rightTokens, tokens[index]);
+	return operatorSelect(leftTokens, rightTokens, tokens[index]);
 }
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
-  if(tokens.size() > 1)
-  {
-    // shave outer parens
-    if(tokens.at(0) == "(" && (GetMatchingParens(0, tokens)==tokens.size()-1))
-    {
-      tokens.pop_back();
-      tokens.erase(tokens.begin());
-    }
+	if(tokens.size() > 1)
+	{
+		// shave outer parens
+		if(tokens.at(0) == "(" && (GetMatchingParens(0, tokens)==tokens.size()-1))
+		{
+			tokens.pop_back();
+			tokens.erase(tokens.begin());
+		}
     
-    int mid;
+		int mid;
     
-    // checks all assignment operators
-    mid = findOperator1(tokens);
+		// checks all assignment operators
+		mid = findOperator1(tokens);
     
-    // checks or
-    if(mid == -1)
-      mid = findOperator2(tokens);
+		// checks or
+		if(mid == -1)
+			mid = findOperator2(tokens);
 
-    // checks and
-    if(mid == -1)
-      mid = findOperator3(tokens);
+		// checks and
+		if(mid == -1)
+			mid = findOperator3(tokens);
 
-    // checks equality comparison
-    if(mid == -1)
-      mid = findOperator4(tokens);
+		// checks equality comparison
+		if(mid == -1)
+			mid = findOperator4(tokens);
 
-    // checks less than greater than comparison
-    if(mid == -1)
-      mid = findOperator5(tokens);
+		// checks less than greater than comparison
+		if(mid == -1)
+			mid = findOperator5(tokens);
     
-    // checks add and subtract
-    if(mid == -1)
-      mid = findOperator6(tokens);
+		// checks add and subtract
+		if(mid == -1)
+			mid = findOperator6(tokens);
 
-    // checks multiply and divide
-    if(mid == -1)
-      mid = findOperator7(tokens);
+		// checks multiply and divide
+		if(mid == -1)
+			mid = findOperator7(tokens);
     
-    if(mid == -1)
-      mid = findOperator8(tokens);
+		if(mid == -1)
+			mid = findOperator8(tokens);
     
-    if(mid != -1)
-      return split(mid, tokens);
+		if(mid != -1)
+			return split(mid, tokens);
     
 		if (tokens[0] == "int" || tokens[0] == "float" || tokens[0] == "string"
-				|| tokens[0] == "bool")
+			|| tokens[0] == "bool")
 		{
 			//variable declaration here
 			//so lets interpret
@@ -938,26 +938,26 @@ Variable Lexer::doLine(vector<string> &tokens)
 			//cerr <<"ADDING: "<< variables[variables.size()-1].name << endl;
 			return variables[variables.size()-1];
 		}
-    //check if its a function
-    if(tokens.size() > 2)
-    {
-      //we assume function call
-      if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
-      {
+		//check if its a function
+		if(tokens.size() > 2)
+		{
+			//we assume function call
+			if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
+			{
 				//proper function call
-    	  //cout << "Found a function: " << tokens[0] << endl;
+				//cout << "Found a function: " << tokens[0] << endl;
 				return SetupFunction(1, tokens);
 
-      }
+			}
 
-      else
-      {
+			else
+			{
 				cerr << "Function call syntax error at line " << currentLine << endl;
 				exit(1);
-      }
-    }
-  }
-  else if (tokens.size() == 1)
+			}
+		}
+	}
+	else if (tokens.size() == 1)
 	{
 		//Find Value should handle the type and value.
 		return FindValue(tokens[0]);
@@ -1060,28 +1060,28 @@ Variable& Lexer::FindValue(string name)
 	}
 	else if (name[0] == '.')
 	{
-	  Variable ret;
-	  //float literal
-	  ret.type = FLOAT;
-	  //cast the string into a float now
-	  istringstream iss(name);
+		Variable ret;
+		//float literal
+		ret.type = FLOAT;
+		//cast the string into a float now
+		istringstream iss(name);
 
-	  float *t = new float;
+		float *t = new float;
 
-	  iss >> *t;
-	  ret.data = t;
-	  variables.push_back(ret);
-	  return variables[variables.size()-1];
+		iss >> *t;
+		ret.data = t;
+		variables.push_back(ret);
+		return variables[variables.size()-1];
 	}
 
 	else if (name == "true" || name == "false")
 	{
-	  Variable ret;
-	  ret.type = BOOL;
-	  if(name == "true")
-	    ret.data = new bool(true);
-	  else
-	    ret.data = new bool(false);
+		Variable ret;
+		ret.type = BOOL;
+		if(name == "true")
+			ret.data = new bool(true);
+		else
+			ret.data = new bool(false);
 	}
 	cerr << "Variable " << name << " not declared in scope." << endl;
 	cerr << "Scope: " << endl;
@@ -1094,259 +1094,259 @@ Variable& Lexer::FindValue(string name)
 
 Variable Lexer::OpMinus(Variable left, Variable right)
 {
-  Variable var;
+	Variable var;
 
-  //case float - float
-  if((left.type == FLOAT) && (right.type == FLOAT))
-  {
-    var.type = FLOAT;
-    var.data = new float(*(float*) left.data - *(float *) right.data);
+	//case float - float
+	if((left.type == FLOAT) && (right.type == FLOAT))
+	{
+		var.type = FLOAT;
+		var.data = new float(*(float*) left.data - *(float *) right.data);
     
-  }
+	}
 
-  // case int - int
-  else if(left.type == INT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data - *(int *) right.data);
-  }
+	// case int - int
+	else if(left.type == INT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data - *(int *) right.data);
+	}
 
-  // case int - float
-  else if(left.type == INT && right.type == FLOAT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data - *(int *) right.data);
-  }
+	// case int - float
+	else if(left.type == INT && right.type == FLOAT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data - *(int *) right.data);
+	}
 
-  // case float - int
-  else if(left.type == FLOAT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data - *(int *) right.data);
+	// case float - int
+	else if(left.type == FLOAT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data - *(int *) right.data);
 
-  }
+	}
  
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 
-  return var;
+	return var;
 }
 
 Variable Lexer::OpMultiply(Variable left, Variable right)
 {
-  Variable var;
+	Variable var;
 
-  //case float - float
-  if(left.type == FLOAT && right.type == FLOAT)
-  {
-    var.type = FLOAT;
-    var.data = new float(*(float*) left.data * *(float *) right.data);
-  }
+	//case float - float
+	if(left.type == FLOAT && right.type == FLOAT)
+	{
+		var.type = FLOAT;
+		var.data = new float(*(float*) left.data * *(float *) right.data);
+	}
 
-  // case int - int
-  else if(left.type == INT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data * *(int *) right.data);
-}
+	// case int - int
+	else if(left.type == INT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data * *(int *) right.data);
+	}
 
-  // case int - float
-  else if(left.type == INT && right.type == FLOAT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data * *(int *) right.data);
-  }
+	// case int - float
+	else if(left.type == INT && right.type == FLOAT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data * *(int *) right.data);
+	}
 
-  // case float - int
-  else if(left.type == FLOAT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data * *(int *) right.data);
-  }
+	// case float - int
+	else if(left.type == FLOAT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data * *(int *) right.data);
+	}
   
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 
-  return var;
+	return var;
 }
 
 Variable Lexer::OpDivide(Variable left, Variable right)
 {
-  Variable var;
+	Variable var;
 
-  //case float - float
-  if(left.type == FLOAT && right.type == FLOAT)
-  {
-    var.type = FLOAT;
-    var.data = new float(*(float*) left.data / *(float *) right.data);
-  }
+	//case float - float
+	if(left.type == FLOAT && right.type == FLOAT)
+	{
+		var.type = FLOAT;
+		var.data = new float(*(float*) left.data / *(float *) right.data);
+	}
 
-  // case int - int
-  else if(left.type == INT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data / *(int *) right.data);
-  }
+	// case int - int
+	else if(left.type == INT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data / *(int *) right.data);
+	}
 
-  // case int - float
-  else if(left.type == INT && right.type == FLOAT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data / *(int *) right.data);
-  }
+	// case int - float
+	else if(left.type == INT && right.type == FLOAT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data / *(int *) right.data);
+	}
 
-  // case float - int
-  else if(left.type == FLOAT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data / *(int *) right.data);
+	// case float - int
+	else if(left.type == FLOAT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data / *(int *) right.data);
 
-  }
+	}
   
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 
-  return var;
+	return var;
 }
 
 Variable Lexer::OpMod(Variable left, Variable right)
 {
-  Variable var;
+	Variable var;
 
-  if(left.type == INT && right.type == INT)
-  {
-    var.type = INT;
-    var.data = new int(*(int *) left.data % *(int *) right.data);
-  }
+	if(left.type == INT && right.type == INT)
+	{
+		var.type = INT;
+		var.data = new int(*(int *) left.data % *(int *) right.data);
+	}
 
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 
-  return var;
+	return var;
 }
 
 Variable Lexer::OpPlusPlus(Variable var, bool isLeft)
 {
-  Variable temp;
+	Variable temp;
 
-  if(var.type == INT)
-  {
-    temp.type = INT;
-    temp.data = new int(1);
-    if(isLeft)
-    {
-      temp = OpPlus(var, temp);
-      UpdateValue(var.name, temp);
-      return temp;
-    }
+	if(var.type == INT)
+	{
+		temp.type = INT;
+		temp.data = new int(1);
+		if(isLeft)
+		{
+			temp = OpPlus(var, temp);
+			UpdateValue(var.name, temp);
+			return temp;
+		}
     
-    else
-    {
-      UpdateValue(var.name, OpPlus(var, temp));
-      return var;
-    }
-  }
+		else
+		{
+			UpdateValue(var.name, OpPlus(var, temp));
+			return var;
+		}
+	}
 
-  if(var.type == FLOAT)
-  {
-    temp.type = FLOAT;
-    temp.data = new float(1.0);
+	if(var.type == FLOAT)
+	{
+		temp.type = FLOAT;
+		temp.data = new float(1.0);
 
-    if(isLeft)
-    {
-      temp = OpPlus(var, temp);
-      UpdateValue(var.name, temp);
-      return temp;
-    }
+		if(isLeft)
+		{
+			temp = OpPlus(var, temp);
+			UpdateValue(var.name, temp);
+			return temp;
+		}
     
-    else
-    {
-      UpdateValue(var.name, OpPlus(var, temp));
-      return var;
-    }
-  }
+		else
+		{
+			UpdateValue(var.name, OpPlus(var, temp));
+			return var;
+		}
+	}
 
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 }
 
 Variable Lexer::OpMinusMinus(Variable var, bool isLeft)
 {
-  Variable temp;
-  if(var.type == INT)
-  {
-    temp.type = INT;
-    temp.data = new int(-1);
-    if(isLeft)
-    {
-      temp = OpPlus(var, temp);
-      UpdateValue(var.name, temp);
-      return temp;
-    }
+	Variable temp;
+	if(var.type == INT)
+	{
+		temp.type = INT;
+		temp.data = new int(-1);
+		if(isLeft)
+		{
+			temp = OpPlus(var, temp);
+			UpdateValue(var.name, temp);
+			return temp;
+		}
     
-    else
-    {
-      UpdateValue(var.name, OpPlus(var, temp));
-      return var;
-    }
-  }
+		else
+		{
+			UpdateValue(var.name, OpPlus(var, temp));
+			return var;
+		}
+	}
 
-  if(var.type == FLOAT)
-  {
-    temp.type = FLOAT;
-    temp.data = new float(1.0);
+	if(var.type == FLOAT)
+	{
+		temp.type = FLOAT;
+		temp.data = new float(1.0);
 
-    if(isLeft)
-    {
-      temp = OpPlus(var, temp);
-      UpdateValue(var.name, temp);
-      return temp;
-    }
+		if(isLeft)
+		{
+			temp = OpPlus(var, temp);
+			UpdateValue(var.name, temp);
+			return temp;
+		}
     
-    else
-    {
-      UpdateValue(var.name, OpPlus(var, temp));
-      return var;
-    }
-  }
+		else
+		{
+			UpdateValue(var.name, OpPlus(var, temp));
+			return var;
+		}
+	}
 
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
 }
 
 Variable Lexer::OpNot(Variable var)
 {
-  Variable temp;
-  if(var.type == BOOL)
-  {
-    temp.type = var.type;
-    temp.data = new bool(!*(bool *) var.data);
-  }
+	Variable temp;
+	if(var.type == BOOL)
+	{
+		temp.type = var.type;
+		temp.data = new bool(!*(bool *) var.data);
+	}
 
-  else
-  {
-    cerr << "invalid variable type" << endl;
-    exit(1);
-  }
-  return temp;
+	else
+	{
+		cerr << "invalid variable type" << endl;
+		exit(1);
+	}
+	return temp;
 }
 
 Variable Lexer::OpPlus(Variable left, Variable right)
@@ -1361,10 +1361,10 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 		|| ((left.type == INT || left.type == BOOL) && (right.type == BOOL || right.type == INT)))
 
 	{
-			var.type = INT;		// Change type
-			var.data = new int(*(int *)left.data + *(int *)right.data);		// Assign initial value to match type
-			// Assign correct value
-    }
+		var.type = INT;		// Change type
+		var.data = new int(*(int *)left.data + *(int *)right.data);		// Assign initial value to match type
+		// Assign correct value
+	}
 
 
 	// STRING
@@ -1373,43 +1373,43 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 	if ((left.type == STRING) && (right.type == STRING))
 	{
 		var.type = STRING;		// Change type
-        string temp = *(char **)left.data;
-        temp += *(char **)right.data;
+		string temp = *(char **)left.data;
+		temp += *(char **)right.data;
 		var.data = new string(temp);		// Assign initial value to match type
 		// Assign correct value
 	}
- /*
-    if ((left.type == STRING) && (right.type == INT))
-	{
-		var.type = STRING;		// Change type
-		var.data = new string(*(char *)left.data + *(char *)right.data);		// Assign initial value to match type
-		// Assign correct value
-	}
-    */
+	/*
+	  if ((left.type == STRING) && (right.type == INT))
+	  {
+	  var.type = STRING;		// Change type
+	  var.data = new string(*(char *)left.data + *(char *)right.data);		// Assign initial value to match type
+	  // Assign correct value
+	  }
+	*/
 	// String + Bool
 	if (left.type == STRING && left.type == BOOL)
 	{
-        string value;
+		string value;
 		var.type = STRING;		// Change type
-        if (*(bool *)right.data)
+		if (*(bool *)right.data)
 			value = "true";
 		else
 			value = "false";
 		var.data = new string(*(char *)left.data + value);		// Assign initial value to match type
-        // Assign correct value
+		// Assign correct value
 	}
 
 	// Bool + String
 	if (left.type == BOOL && left.type == STRING)
 	{
-        string value;
+		string value;
 		var.type = STRING;		// Change type
-        if (*(bool *)left.data)
+		if (*(bool *)left.data)
 			value = "true";
 		else
 			value = "false";
 		var.data = new string(value + *(char *)right.data);		// Assign initial value to match type
-        // Assign correct value
+		// Assign correct value
 	}
 
 	// :)
@@ -1420,7 +1420,7 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 	{
 		var.type = FLOAT;		// Change type
 		var.data = new float(*(float *)left.data + *(float *)right.data);		// Assign initial value to match type
-		 // Assign correct value
+		// Assign correct value
 	}
 
 
@@ -1432,7 +1432,7 @@ Variable Lexer::OpPlus(Variable left, Variable right)
 		var.type = BOOL;		// Change type
 		var.data = new bool(*(bool *)left.data + *(bool *)right.data);		// Assign initial value to match type
 
-		 // Assign correct value
+		// Assign correct value
 	}
 
 	return var;
@@ -1568,15 +1568,15 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 
 int Lexer::numTabs(string line)
 {
-    int num = 0; 
-    for(int i = 0; i < line.size(); i++)
-    {
-        if(line[i] == '\t')
-            num++;
-        else
-            return num;
-    }
-    return num;
+	int num = 0; 
+	for(int i = 0; i < line.size(); i++)
+	{
+		if(line[i] == '\t')
+			num++;
+		else
+			return num;
+	}
+	return num;
 }
 
 int Lexer::FindPCBack(bool elseOk)
