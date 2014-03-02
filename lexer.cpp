@@ -36,7 +36,7 @@ int Lexer::sendMail(vector<string> &tokens)
 		fprintf(mailpipe, "To: %s\n", tokens[1].c_str());
 		fprintf(mailpipe, "From: %s\n", tokens[2].c_str());
 		fprintf(mailpipe, "Subject: %s\n\n", tokens[3].c_str());
-		fwrite(tokens[4].c_str(), 1, strlen(tokens[4].c_str()), mailpipe);
+		fwrite(tokens[4].c_str(), 1, tokens[4].size(), mailpipe);
 		fwrite(".\n", 1, 2, mailpipe);
 		pclose(mailpipe);
 		retval = 0;
