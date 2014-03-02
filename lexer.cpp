@@ -278,7 +278,7 @@ void Lexer::GoThroughFunction(Function func)
 	int tabCount = numTabs(fileLines[currentLine])-1;
 	
 	
-	while(fileLines[currentLine][tabCount] == '\t')
+	while(fileLines[currentLine][0] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
@@ -286,7 +286,7 @@ void Lexer::GoThroughFunction(Function func)
 		if(tokens.size()> 0)
 			doLine(tokens);
 		currentLine++;
-		if(currentLine == fileLines.size()-1)
+		if(currentLine >= fileLines.size())
 		{
 			break;
 		}
@@ -772,11 +772,6 @@ Variable Lexer::split(int index, vector<string> tokens)
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
-  for (int i = 0; i < tokens.size(); i++)
-  {
-	  cout << "\"" << tokens[i] << "\"\n";
-  }
-  cout << "\n\n";
   if(tokens.size() > 1)
   {
     // shave outer parens
