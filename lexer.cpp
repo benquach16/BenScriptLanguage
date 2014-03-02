@@ -1,5 +1,4 @@
 #include "lexer.h"
-
 Lexer::Lexer() : currentLine(1)
 {
 	
@@ -26,8 +25,11 @@ bool Lexer::MakeVarIfVar( vector<string> &tokens)
         var.type = STRING;
     else
         return false;
-    //~ tokens.erase(tokens.begin());
-    //~ doLine(tokens);
+    if(tokens.size() > 2)
+    {
+    	tokens.erase(tokens.begin());
+    	doLine(tokens);
+    }
 
     variables.push_back(var);
 		//cerr << "current scope: " << endl;
@@ -273,15 +275,18 @@ void Lexer::GoThroughFunction(Function func)
 	//loop while there is a tab
 	currentLine = func.fileLine+1;
 
-	while(fileLines[currentLine][0] == '\t')
+	int tabCount = numTabs(fileLines[currentLine])-1;
+	
+	
+	while(fileLines[currentLine][tabCount] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
 		//cerr << currentLine << endl;
-		if(tokens.size() > 0)
+		if(tokens.size()> 0)
 			doLine(tokens);
 		currentLine++;
-		if(currentLine >= fileLines.size())
+		if(currentLine == fileLines.size()-1)
 		{
 			break;
 		}
@@ -353,7 +358,7 @@ vector<string> Lexer::TokenizeLine(const string &str)
   bool quote = false;
 
   // traverse line end if get to end or hit comment
-  while(i != str.size() && str[i] != '#')
+  while(i != str.size() && str[i] != '#' && str[i] != 13)
   {
 		if(str[i] == '\t' && !quote)
 		{
@@ -767,7 +772,11 @@ Variable Lexer::split(int index, vector<string> tokens)
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
-  //cerr << "start" << endl;
+  for (int i = 0; i < tokens.size(); i++)
+  {
+	  cout << "\"" << tokens[i] << "\"\n";
+  }
+  cout << "\n\n";
   if(tokens.size() > 1)
   {
     // shave outer parens
@@ -1430,7 +1439,7 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 	}
 }
 
-int numTabs(string line)
+int Lexer::numTabs(string line)
 {
     int num; 
     bool hellnah = false;
