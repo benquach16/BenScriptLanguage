@@ -1,14 +1,16 @@
-function asdoginasdo()
-	print("asdf")
-	if(cond)
-	
-	print("asdf")
-	print("asdf")
+function foo(int a)
+	int b = 4
+	int a = 5
+	print(a)
+	print(asdfsadfjasdlk)
 function main()
+	bool asdfsadfjasdlk
 	if(true)
 		print("test")
 		int test = 1
 		print(test)
+		print("Going to foo")
+		foo(test)
 		if(false)
 			print("test")
 			int test = 1

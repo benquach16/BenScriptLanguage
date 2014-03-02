@@ -21,7 +21,7 @@ Lexer::~Lexer()
 }
 
 //Helper Functions
-bool Lexer::MakeVarIfVar( vector<string> &tokens)
+bool Lexer::MakeVarIfVar(vector<string> &tokens)
 {
     
     Variable var;
@@ -205,9 +205,7 @@ void Lexer::FirstPass()
 	{
 		if(vectorOfFunctions[j].name == "main")
 		{
-			//cout << "MAIN FOUND" << endl;
 			currentLine = vectorOfFunctions[j].fileLine;
-			//cout << currentLine << endl;
 			vector<Variable> emptyArgs;
 			doFunction("main", emptyArgs);
 			break;
@@ -218,36 +216,37 @@ void Lexer::FirstPass()
 
 void Lexer::AddScope(string input)
 {
-  //checks if adding main
-  bool hasHash = false;
-  Variable temp;
-  temp.name = input;
-  temp.type = INT;
+	//checks if adding main
+	Variable temp;
+	temp.name = input;
+	temp.type = INT;
 
-  int firstHash;
-  // traverses variables for hashtags and 
-  for(int i = 0; i < variables.size(); i++)
-    if(variables.at(i).name == "#")
-    {
-      hasHash = true;
-      firstHash = i;
-      break;
-    }
-
-  
-  if(variables.at(firstHash).name == "#")
-  {
-    if(!hasHash)
-      temp.data = new int(variables.size());
-    
-    else
-    {
-      temp.data = new int(*(int *)variables.at(firstHash).data);
-      *(int *)variables.at(firstHash).data = variables.size();
-    }
-  }
-
-  variables.push_back(temp);
+	int firstHash = -1;
+	// traverses variables for hashtags and 
+	if(input[0] != '-')
+	{
+		for(int i = 0; i < variables.size(); i++)
+		{
+			if(variables.at(i).name == "#")
+			{
+			  firstHash = i;
+			  break;
+			}
+		}
+	
+			
+		if(firstHash != -1)
+		{
+			temp.data = new int(*(int *)variables.at(firstHash).data);
+			*(int*)variables.at(firstHash).data = variables.size();
+			
+		}
+		else
+		{
+			temp.data = new int(variables.size());
+		}
+	}
+	variables.push_back(temp);
 }
 
 void Lexer::EraseScope()
@@ -270,18 +269,19 @@ void Lexer::EraseScope()
   variables.pop_back();
 }
 
-Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
+Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 {
-  for(int i = 0; i < variables.size(); i++)
-    cout << variables.at(i).name << endl;
-  cout << endl;
   //set return value to null
   if(funcName != "print")
   {
     if(funcName == "if" || funcName == "while" || funcName == "for" || funcName =="else")
-      AddScope("-");
+    {
+        AddScope("-");
+    }
     else
-      AddScope("#");
+    {
+        AddScope("#");
+    }
   }
   if(funcName == "print")
   {
@@ -328,7 +328,6 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
       GoThroughFunction();
     }
     currentLine = PCBack;
-    cout << "PCBack: " << PCBack << endl;
     if(arguments.size() == 0)
     {
       cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
@@ -336,39 +335,34 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
     }
     return arguments[0];
   }
-  for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
-  {
-    //make sure we have the proper var types
-    Function func;
-    //cerr << vectorOfFunctions[0].name << endl;
-    if(funcName == vectorOfFunctions[i].name && 
-       vectorOfFunctions[i].functionArguments.size() == arguments.size())
-    {
-      bool loopBroken = false;
-      for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
-      {
-	if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
+	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
-	  loopBroken = true;
-	  break;
+	  if(funcName == vectorOfFunctions[i].name && vectorOfFunctions[i].functionArguments.size() == arguments.size())
+	  {
+			bool loopBroken = false;
+			for(unsigned j = 0; j < vectorOfFunctions[i].functionArguments.size(); j++)
+			{
+			  if(vectorOfFunctions[i].functionArguments[j].type != arguments[j].type)
+			  {
+				  loopBroken = true;
+				  break;
+			  }
+			}
+		  	if(!loopBroken)
+		  	{
+				Variable ret;
+				ret.data = 0;			
+				//save the program counter temporarily
+				int prevCurrentLine = currentLine;
+				GoThroughFunction(vectorOfFunctions[i]);
+				//reset
+				currentLine = prevCurrentLine;
+				return ret;
+		    }
+		}
 	}
-      }
-      if(!loopBroken)
-      {
-	Variable ret;
-	ret.data = 0;			
-	//save the program counter temporarily
-	int prevCurrentLine = currentLine;
-	GoThroughFunction(vectorOfFunctions[i]);
-	//reset
-	currentLine = prevCurrentLine;
-	return ret;
-      }
-      
-    }
-  }
-  cerr << "No function call found for " << funcName << endl;
-  exit(1);
+	cerr << "No function call found for " << funcName << endl;
+	exit(1);
   
 }
 
@@ -882,7 +876,6 @@ Variable Lexer::split(int index, vector<string> tokens)
 
 Variable Lexer::doLine(vector<string> &tokens)
 {
-	//for(int i = 0; i < tokens.size(); i++){cout << "\"" << tokens[i] << "\"" << endl;}cout << "\n\n" << endl;
   if(tokens.size() > 1)
   {
     // shave outer parens
