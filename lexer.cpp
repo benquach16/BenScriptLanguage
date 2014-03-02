@@ -536,7 +536,7 @@ vector<string> Lexer::TokenizeLine(const string &str)
 		// if hit math operators push them back
 		else if(str[i] == '=' || str[i] == '+' || str[i] == '-' ||
 				str[i] == '/' || str[i] == '*' || str[i] == '>' ||
-				str[i] == '<')
+			str[i] == '<' || str[i] == '!')
 		{
 			if(curToken.size() > 0)
 			{
@@ -1077,11 +1077,12 @@ Variable& Lexer::FindValue(string name)
 		Variable ret;
 		ret.type = STRING;
 		//realloc mem
-		char *t = new char[name.size()];
+		char *t = new char[name.size()+1];
 		for(unsigned i = 0; i < name.size(); i++)
 		{
 			t[i] = name[i];
 		}
+		t[name.size()] = '\0';
 		ret.data = t;
 		variables.push_back(ret);
 		return variables[variables.size()-1];
@@ -1490,7 +1491,12 @@ bool Lexer::OpGreat(Variable left, Variable right)
 {
 	// String
 	if (left.type == STRING && right.type == STRING)
-		return (*(char *)left.data > *(char *)right.data);
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) > 0)
+	    return true;
+	  else
+	    return false;
+	}
 
 	// INT
 	if (left.type == INT && right.type == INT)
@@ -1508,7 +1514,12 @@ bool Lexer::OpLess(Variable left, Variable right)
 {
 	// String
 	if (left.type == STRING && right.type == STRING)
-		return (*(char *)left.data < *(char *)right.data);
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) < 0)
+	    return true;
+	  else
+	    return false;
+	}
 
 	// INT
 	if (left.type == INT && right.type == INT)
@@ -1526,7 +1537,13 @@ bool Lexer::OpLessEqual(Variable left, Variable right)
 {
 	// String
 	if (left.type == STRING && right.type == STRING)
-		return (*(char *)left.data <= *(char *)right.data);
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) == 0 ||
+	     strcmp(*(char **)left.data, *(char **)right.data) < 0)
+	    return true;
+	  else
+	    return false;
+	}
 
 	// INT
 	if (left.type == INT && right.type == INT)
@@ -1544,7 +1561,13 @@ bool Lexer::OpGreatEqual(Variable left, Variable right)
 {
 	// String
 	if (left.type == STRING && right.type == STRING)
-		return (*(char *)left.data >= *(char *)right.data);
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) == 0 ||
+	     strcmp(*(char **)left.data, *(char **)right.data) > 0)
+	    return true;
+	  else
+	    return false;
+	}
 
 	// INT
 	if (left.type == INT && right.type == INT)
@@ -1593,6 +1616,24 @@ bool Lexer::OpCompare(Variable left, Variable right)
 		return *(bool *)left.data == *(bool *)right.data;
 	}
 
+	else if(left.type == INT && right.type == INT)
+	{
+	  return *(int *)left.data == *(int *)right.data;
+	}
+
+	else if(left.type == FLOAT && right.type == FLOAT)
+	{
+	  return *(float *)left.data == *(float *)right.data;
+	}
+
+	else if(left.type == STRING && right.type == STRING)
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) != 0)
+	    return false;
+	  else
+	    return true;
+	}
+
 	else
 	{
 		cerr << "invalid variable type" << endl;
@@ -1607,12 +1648,31 @@ bool Lexer::OpInvCompare(Variable left, Variable right)
 		return *(bool *)left.data != *(bool *)right.data;
 	}
 
+	else if(left.type == INT && right.type == INT)
+	{
+	  return *(int *)left.data != *(int *)right.data;
+	}
+
+	else if(left.type == FLOAT && right.type == FLOAT)
+	{
+	  return *(float *)left.data != *(float *)right.data;
+	}
+
+	else if(left.type == STRING && right.type == STRING)
+	{
+	  if(strcmp(*(char **)left.data, *(char **)right.data) == 0)
+	    return false;
+	  else
+	    return true;
+	}
+
 	else
 	{
 		cerr << "invalid variable type" << endl;
 		exit(1);
 	}
 }
+
 
 int Lexer::numTabs(string line)
 {
