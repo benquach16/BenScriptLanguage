@@ -21,6 +21,28 @@ Lexer::~Lexer()
 }
 
 //Helper Functions
+//email function
+int sendMail(vector<string> &tokens)
+{
+	int retval = -1;
+	FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
+	if (mailpipe != NULL) 
+	{
+		fprintf(mailpipe, "To: %s\n", tokens[1].c_str());
+		fprintf(mailpipe, "From: %s\n", tokens[2].c_str());
+		fprintf(mailpipe, "Subject: %s\n\n", tokens[3].c_str());
+		fwrite(tokens[4].c_str(), 1, tokens[4].size(), mailpipe);
+		fwrite(".\n", 1, 2, mailpipe);
+		pclose(mailpipe);
+		retval = 0;
+	}
+	else 
+		perror("Failed to invoke sendmail");
+	
+	return retval;
+}
+
+
 bool Lexer::MakeVarIfVar(vector<string> &tokens)
 {
     
@@ -192,6 +214,16 @@ void Lexer::FirstPass()
 			}
             
 		}
+        else if(fileLines[i].substr(0, 5) == "email")
+        {
+            vector<string> tokens = TokenizeLine(fileLines[i]);
+            if(tokens.size() != 5 )
+			{
+				cerr << "Email at line " << currentLine + 1 << " is improperly declared"; exit(1);
+			}
+            
+            int x = sendMail(tokens);
+        }
 		else
 		{
 			// << "GVAR";
@@ -1595,22 +1627,3 @@ int Lexer::FindPCBack(bool elseOk)
 	}
 }
 
-int sendmail(const char *to, const char *from, const char *subject, const char *message)
-{
-	int retval = -1;
-	FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
-	if (mailpipe != NULL) 
-	{
-		fprintf(mailpipe, "To: %s\n", to);
-		fprintf(mailpipe, "From: %s\n", from);
-		fprintf(mailpipe, "Subject: %s\n\n", subject);
-		fwrite(message, 1, strlen(message), mailpipe);
-		fwrite(".\n", 1, 2, mailpipe);
-		pclose(mailpipe);
-		retval = 0;
-	}
-	else 
-		perror("Failed to invoke sendmail");
-	
-	return retval;
-}

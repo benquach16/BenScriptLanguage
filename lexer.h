@@ -5,6 +5,8 @@
 #include <string>
 #include <cstdlib>
 #include <sstream>
+#include <stdio.h>
+#include <errno.h>
 
 using namespace std;
 
@@ -94,6 +96,7 @@ public:
 	int findOperator7(vector<string> tokens);
 	int findOperator8(vector<string> tokens);
 	int FindPCBack(bool elseOk);
+    int sendMail( vector<string> &tokens);
 	void AddScope(string input);
 	void EraseScope();
 	Variable doFunction(string funcName, vector<Variable> arguments);
