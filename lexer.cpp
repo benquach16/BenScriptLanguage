@@ -346,7 +346,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 
 	else if(funcName == "email")
 	{
-		cerr << "email" <<endl;
+		//cerr << "email" <<endl;
 	}
 	else if(funcName == "if")
 	{
@@ -376,7 +376,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 			cerr << "While statements need a single boolean condition, you dingus. Line " << currentLine << ".";
 			exit(1);
 		}
-		int PCBack = *(bool*)arguments[0].data ? currentLine : FindPCBack(false) - 1;
+		int PCBack = *(bool*)arguments[0].data ? currentLine-1 : FindPCBack(false) - 1;
 		if(*(bool*)arguments[0].data)
 		{
 			currentLine++;
@@ -631,7 +631,7 @@ vector<string> Lexer::TokenizeLine(const string &str)
 
 	if(!curToken.empty())
 		tokens.push_back(curToken);
-
+	
 	if((int)(tokens[tokens.size()-1][0]) == 13)
 		tokens.pop_back();
 	return tokens;
