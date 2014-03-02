@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <errno.h>
+#include <cstring>
 
 using namespace std;
 

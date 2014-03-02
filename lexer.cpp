@@ -18,11 +18,6 @@ Lexer::Lexer() : currentLine(1)
 
 Lexer::~Lexer()
 {
-	for(unsigned i = 0; i < variables.size(); i++)
-	{
-		delete variables[i].data;
-	}
-	variables.clear();
 }
 
 //Helper Functions
@@ -366,13 +361,13 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 			cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
 			exit(1);
 		}
-		int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
+		int PCBack = FindPCBack(!*(bool*)arguments[0].data);
 		if(*(bool*)arguments[0].data)
 		{
 			currentLine++;
 			GoThroughFunction();
 		}
-		currentLine = PCBack;
+		currentLine = PCBack-1;
 		if(arguments.size() == 0)
 		{
 			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;

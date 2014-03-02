@@ -1,7 +1,11 @@
+function bar()
+	print("bass bass")
+
 function foo(int a)
 	print("the answer is ")
 	a+=2
 	print(a)
+	bar()
 
 function main()
 	int b = 2

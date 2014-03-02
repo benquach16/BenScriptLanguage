@@ -3,21 +3,16 @@ function foo(int a)
 	int a = 5
 	print(a)
 function main()
-	if(true)
+	int c = 4
+	int d = 6
+	if(c == d)
 		print("test")
 		int test = 1
 		print(test)
 		print("Going to foo")
 		foo(test)
-		if(false)
-			print("test")
-			int test = 1
-			print(test)
-		else
-			print("else'd")
-			bool another = true
-		print("Nested complete")
 	else
-		print("else'd")
-		bool test = true
-	print("If complete")
+		print("Ifcomplete")
+
+
+
