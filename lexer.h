@@ -96,6 +96,7 @@ public:
 	int FindPCBack(bool elseOk);
 	Variable doFunction(string funcName, vector<Variable> &arguments);
 	void GoThroughFunction(Function func);
+	void GoThroughFunction();
  	void ChangeFunction(unsigned vectorIndex);
 	int GetMatchingParens(unsigned leftParens, vector<string> &tokens);
 	Variable SetupFunction(unsigned leftParens, vector<string> &tokens);

@@ -198,6 +198,18 @@ void Lexer::FirstPass()
             //cout << fileLines[i] << endl;
         }
 	}
+	for(int j = 0; j<vectorOfFunctions.size(); j++)
+	{
+		if(vectorOfFunctions[j].name == "main")
+		{
+			cout << "MAIN FOUND" << endl;
+			currentLine = vectorOfFunctions[j].fileLine;
+			cout << currentLine << endl;
+			vector<Variable> emptyArgs;
+			doFunction("main", emptyArgs);
+			break;
+		}
+	}
 	//cout << "We are out of the FirstPass!" << endl;
 }
 
@@ -229,12 +241,34 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 			    cout << "false" << endl;
 			}
 		}
-		Variable ret;
-		ret.name = "t";
-		ret.type = STRING;
-		char *t = new char;
-		ret.data = t;
-		return ret;
+		if(arguments.size() == 0)
+		{
+			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+			exit(1);
+		}
+		return arguments[0];
+	}
+	else if(funcName == "if")
+	{
+		if(arguments[0].type != BOOL || arguments.size() != 1)
+		{
+			cerr << "If statements need a single boolean condition, you dingus. Line " << currentLine << ".";
+			exit(1);
+		}
+		int PCBack = FindPCBack(!*(bool*)arguments[0].data) - 1;
+		if(*(bool*)arguments[0].data)
+		{
+			currentLine++;
+			GoThroughFunction();
+		}
+		currentLine = PCBack;
+		cout << "PCBack: " << PCBack << endl;
+		if(arguments.size() == 0)
+		{
+			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+			exit(1);
+		}
+		return arguments[0];
 	}
 	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
@@ -251,27 +285,14 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 					loopBroken = true;
 					break;
 				}
-				else
-				{
-					
-					Variable ret;
-					ret.data = 0;			
-					//save the program counter temporarily
-					int prevCurrentLine = currentLine;
-					GoThroughFunction(vectorOfFunctions[i]);
-					//reset
-					currentLine = prevCurrentLine;
-					return ret;				
-				}
 			}
 			if(!loopBroken)
 			{
-	
 				Variable ret;
 				ret.data = 0;			
 				//save the program counter temporarily
 				int prevCurrentLine = currentLine;
-				GoThroughFunction(vectorOfFunctions[0]);
+				GoThroughFunction(vectorOfFunctions[i]);
 				//reset
 				currentLine = prevCurrentLine;
 				return ret;
@@ -289,9 +310,13 @@ void Lexer::GoThroughFunction(Function func)
 	//loop while there is a tab
 	currentLine = func.fileLine+1;
 
-	int tabCount = numTabs(fileLines[currentLine])-1;
-	
-	while(fileLines[currentLine][0] == '\t')
+	GoThroughFunction();
+}
+void Lexer::GoThroughFunction()
+{
+	//loop while there is a tab
+	int tabCount = numTabs(fileLines[currentLine])-1;	
+	while(fileLines[currentLine][tabCount] == '\t')
 	{
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
@@ -846,6 +871,7 @@ Variable Lexer::doLine(vector<string> &tokens)
       if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
       {
 	//proper function call
+    	  cout << "Found a function: " << tokens[0] << endl;
 				return SetupFunction(1, tokens);
 
       }
@@ -1481,7 +1507,7 @@ int Lexer::numTabs(string line)
 int Lexer::FindPCBack(bool elseOk)
 {
 	int tabCount = numTabs(fileLines[currentLine]);
-	for(int i = currentLine; i<fileLines.size(); i++)
+	for(int i = currentLine + 1; i<fileLines.size(); i++)
 	{
 		int tabsOfLine = numTabs(fileLines[i]);
 		if(fileLines[i].size() >= tabsOfLine + 4 && fileLines[i].substr(tabsOfLine, 4) == "else")

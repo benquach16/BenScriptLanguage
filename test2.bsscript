@@ -4,3 +4,8 @@ function main()
 	b = 5
 	b = (b = 5) * (4 + 6)
 	print(b)
+	int c
+	int b = 4 + 5
+	print(b)
+	b = 5
+	b = (b = 5) * (4 + 6)

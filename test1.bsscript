@@ -1,3 +1,23 @@
+function asdoginasdo()
+	print("asdf")
+	if(cond)
+	
+	print("asdf")
+	print("asdf")
 function main()
-	print("hellowold")
-	print("test")
+	if(true)
+		print("test")
+		int test = 1
+		print(test)
+		if(false)
+			print("test")
+			int test = 1
+			print(test)
+		else
+			print("else'd")
+			bool another = true
+		print("Nested complete")
+	else
+		print("else'd")
+		bool test = true
+	print("If complete")

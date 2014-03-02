@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 		interpreter.ReadFile(argv[i]);
 		interpreter.FirstPass();
 		vector<Variable> args;
-		interpreter.doFunction("main", args);
+		//interpreter.doFunction("main", args);
 		//interpreter.FirstPass(argv[i]);
 	}
 	return 0;
