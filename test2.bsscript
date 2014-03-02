@@ -2,7 +2,5 @@ function main()
 	int a
 	int c
 	int b
-	b = 5	
-	b = b + 5 + 3
+	b = 60
 	print(b)
-
