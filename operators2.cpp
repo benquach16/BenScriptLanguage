@@ -1,4 +1,4 @@
-Variable OpMinus(Variable left, Variable right)
+Variable Lexer::OpMinus(Variable left, Variable right)
 {
   Variable var;
 
@@ -33,7 +33,7 @@ Variable OpMinus(Variable left, Variable right)
     var.data = new int(0);
     var -> data = *(int *) left.data - *(int *) right.data;
   }
-  
+ 
   else
   {
     cerr << "invalid variable type" << endl;
@@ -43,7 +43,7 @@ Variable OpMinus(Variable left, Variable right)
   return var;
 }
 
-Variable OpMultiply(Variable left, Variable right)
+Variable Lexer::OpMultiply(Variable left, Variable right)
 {
   Variable var;
 
@@ -88,7 +88,7 @@ Variable OpMultiply(Variable left, Variable right)
   return var;
 }
 
-Variable OpDivide(Variable left, Variable right)
+Variable Lexer::OpDivide(Variable left, Variable right)
 {
   Variable var;
 
@@ -133,7 +133,7 @@ Variable OpDivide(Variable left, Variable right)
   return var;
 }
 
-Variable OpMod(Variable left, Variable right)
+Variable Lexer::OpMod(Variable left, Variable right)
 {
   Variable var;
 
@@ -153,7 +153,7 @@ Variable OpMod(Variable left, Variable right)
   return var;
 }
 
-bool OpOr(Variable left, Variable right)
+bool Lexer::OpOr(Variable left, Variable right)
 {
   if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
   {
@@ -167,7 +167,7 @@ bool OpOr(Variable left, Variable right)
   }
 }
 
-bool OpAnd(Variable left, Variable right)
+bool Lexer::OpAnd(Variable left, Variable right)
 {
   if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
   {
@@ -181,7 +181,7 @@ bool OpAnd(Variable left, Variable right)
   }
 }
 
-bool OpCompare(Variable left, Variable right)
+bool Lexer::OpCompare(Variable left, Variable right)
 {
   if(left.VariableTypes.BOOL == right.VariableTypes.BOOL)
   {
@@ -195,7 +195,7 @@ bool OpCompare(Variable left, Variable right)
   }
 }
 
-bool OpInvCompare(Variable left, Variable right)
+bool Lexer::OpInvCompare(Variable left, Variable right)
 {
   if(left.VariableTypes.BOOL && right.VariableTypes.BOOL)
   {
@@ -209,12 +209,12 @@ bool OpInvCompare(Variable left, Variable right)
   }
 }
 
-Variable OpPlusPlus(Variable var)
+Variable Lexer::OpPlusPlus(Variable var)
 {
   Variable temp;
   if(var.VariableTypes.INT)
   {
-    temp.variableTypes = INT;
+   temp.variableTypes = INT;
     temp.data = new int(1);
     UpdateValue(var.name, OpPlus(var, temp));
   }
@@ -235,7 +235,7 @@ Variable OpPlusPlus(Variable var)
   return var;
 }
 
-Variable OpMinusMinus(variable var)
+Variable Lexer::OpMinusMinus(variable var)
 {
   Variable temp;
   if(var.VariableTypes.INT)
@@ -261,7 +261,7 @@ Variable OpMinusMinus(variable var)
   return var;
 }
 
-Variable OpNot(Variable var)
+Variable Lexer::OpNot(Variable var)
 {
   Variable temp;
   if(var.VariableTypes.BOOL)
