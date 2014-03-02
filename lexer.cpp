@@ -219,17 +219,6 @@ void Lexer::FirstPass()
 			}
             
 		}
-        else if(fileLines[i].substr(0, 5) == "email")
-        {
-            bool concat = false; 
-            vector<string> tokens = TokenizeLine(fileLines[i]);
-            if(tokens.size() < 5 )
-			{
-				cerr << "Email at line " << currentLine + 1 << " is improperly declared"; exit(1);
-			}
-            
-            int x = sendMail(tokens);
-        }
 		else
 		{
 			// << "GVAR";
@@ -354,6 +343,11 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 		}
 		return arguments[0];
 	}
+
+	else if(funcName == "email")
+	{
+		cerr << "email" <<endl;
+	}
 	else if(funcName == "if")
 	{
 		if(arguments[0].type != BOOL || arguments.size() != 1)
@@ -445,7 +439,14 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 {
 	int leftParensCount = 0;
 	vector<int> commas;						//Stores indexes of commas and last )
-
+	if(tokens[0] == "email")
+	{
+		//SPECIAL CASE
+		sendMail(tokens);
+		Variable ret;
+		ret.type = STRING;
+		return ret;
+	}
 	for (int i = leftParens+1; i < tokens.size(); i++)
 	{
 		if (tokens[i] == "(")				// If a left parenthesis is found
@@ -984,6 +985,7 @@ Variable Lexer::doLine(vector<string> &tokens)
 		if(tokens.size() > 2)
 		{
 			//we assume function call
+			
 			if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
 			{
 				//proper function call
@@ -1003,7 +1005,7 @@ Variable Lexer::doLine(vector<string> &tokens)
 	{
 		if(tokens[0] == "else")
 		{
-			cout << "ELSE FOUND, tokens.size() == 1";
+			//cout << "ELSE FOUND, tokens.size() == 1";
 			currentLine++;
 			GoThroughFunction();
 			Variable var;
@@ -1072,13 +1074,15 @@ Variable& Lexer::FindValue(string name)
 		Variable ret;
 		ret.type = STRING;
 		//realloc mem
-		char *t = new char[name.size()+1];
-		for(unsigned i = 0; i < name.size(); i++)
+		char *t = new char[name.size()-1];
+		for(unsigned i = 1; i < name.size()-1; i++)
 		{
-			t[i] = name[i];
+			t[i-1] = name[i];
 		}
-		t[name.size()] = '\0';
+		
+		t[name.size()-2] = '\0';
 		ret.data = t;
+		//cerr << (char*)ret.data << endl;
 		variables.push_back(ret);
 		return variables[variables.size()-1];
 	}

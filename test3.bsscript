@@ -1,5 +1,6 @@
 function bar()
 	print("bass bass")
+	email("bquac002@ucr.edu", "skhan024@ucr.edu", "Hi", "Test")
 
 function foo(int a)
 	print("the answer is ")
@@ -11,5 +12,4 @@ function main()
 	int b = 2
 	foo(b)
     
-email bquac002@ucr.edu skhan024@ucr.edu Hi Waaaaazaaaaaap
 
