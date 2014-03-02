@@ -1,7 +1,9 @@
-function foo()
+function foo(int a)
 	print("helloworld")
+	a+=3
+	print(a)
 
 function main()
-	print("main")
-	foo()
+	int a = 2
+	foo(a)
 

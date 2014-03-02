@@ -1,6 +1,7 @@
 #include "lexer.h"
 Lexer::Lexer() : currentLine(1)
 {
+	//amazing.
   Variable temp;
   temp.type = BOOL;
   temp.name = "true";
@@ -107,7 +108,8 @@ void Lexer::FirstPass()
 		{
 			//cout << "Found a function on line " << i << ".\n";
 			//Tokenize line.
-            vector<string> tokens = TokenizeLine(fileLines[i]);
+			vector<string> tokens = TokenizeLine(fileLines[i]);
+
 			//Make sure that it meets the basic requirements.
 			if(tokens.size() < 4 || tokens[2][0]!='(' )
 			{
@@ -117,6 +119,7 @@ void Lexer::FirstPass()
 			int count = 0;
 			Function newFunc;
 			newFunc.name = tokens[1];
+			
 			//cout << "Function name found: " << newFunc.name << ".\n";
 			newFunc.fileLine = i;
 			Variable arg;
@@ -143,7 +146,7 @@ void Lexer::FirstPass()
                     {
                     	newFunc.functionArguments.push_back(arg);
                     }
-                        
+										cerr << newFunc.name << endl;
 					vectorOfFunctions.push_back(newFunc);
                     
 					//cout << "Function pushed.\n";
@@ -151,19 +154,19 @@ void Lexer::FirstPass()
 				}
 				else if( tokens[j] == "string" && !varTypeAssigned) 
 				{
-					arg.type = STRING; newFunc.name = tokens[j]; varTypeAssigned = true;
+					arg.type = STRING; varTypeAssigned = true;
 				}
 				else if( tokens[j] == "bool" && !varTypeAssigned) 
 				{
-					arg.type = BOOL; newFunc.name = tokens[j]; varTypeAssigned = true;
+					arg.type = BOOL; varTypeAssigned = true;
 				}
 				else if( tokens[j] == "int" && !varTypeAssigned) 
 				{
-					arg.type = INT; newFunc.name = tokens[j]; varTypeAssigned = true;
+					arg.type = INT; varTypeAssigned = true;
 				}
 				else if( tokens[j] == "float" && !varTypeAssigned) 
 				{
-					arg.type = FLOAT; newFunc.name = tokens[j]; varTypeAssigned = true;
+					arg.type = FLOAT;varTypeAssigned = true;
 				}
 				else if(tokens[j][0] == ',' && varTypeAssigned && nameAssigned)
 				{
@@ -274,6 +277,7 @@ Variable Lexer::doFunction(string funcName, vector<Variable> &arguments)
 	{
 		//make sure we have the proper var types
 		Function func;
+		//cerr << vectorOfFunctions[0].name << endl;
 		if(funcName == vectorOfFunctions[i].name && 
 			 vectorOfFunctions[i].functionArguments.size() == arguments.size())
 		{
