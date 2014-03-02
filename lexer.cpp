@@ -369,6 +369,27 @@ Variable Lexer::doFunction(string funcName, vector<Variable> arguments)
 		}
 		return arguments[0];
 	}
+	else if(funcName == "while")
+	{
+		if(arguments[0].type != BOOL || arguments.size() != 1)
+		{
+			cerr << "While statements need a single boolean condition, you dingus. Line " << currentLine << ".";
+			exit(1);
+		}
+		int PCBack = *(bool*)arguments[0].data ? currentLine : FindPCBack(false) - 1;
+		if(*(bool*)arguments[0].data)
+		{
+			currentLine++;
+			GoThroughFunction();
+		}
+		currentLine = PCBack;
+		if(arguments.size() == 0)
+		{
+			cerr << "Not enough arguments for print at line " << currentLine << "." << endl;
+			exit(1);
+		}
+		return arguments[0];
+	}
 	for(unsigned i = 0; i < vectorOfFunctions.size(); i++)
 	{
 		if(funcName == vectorOfFunctions[i].name && vectorOfFunctions[i].functionArguments.size() == arguments.size())
@@ -502,7 +523,12 @@ vector<string> Lexer::TokenizeLine(const string &str)
 {
 	vector<string> tokens;
 
-	int i = 0;
+	int i = numTabs(str);
+	
+	if(i == str.size() - 1)
+	{
+		return tokens;
+	}
 
 	string curToken;
 

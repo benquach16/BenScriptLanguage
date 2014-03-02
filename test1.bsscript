@@ -3,8 +3,9 @@ function foo(int a)
 	int a = 5
 	print(a)
 function main()
-	int c = 4
-	int d = 6
+	int c = 6
+	int d = 5
+	d++
 	if(c == d)
 		print("test")
 		int test = 1
@@ -13,6 +14,9 @@ function main()
 		foo(test)
 	else
 		print("Ifcomplete")
-
+		
+	while(c < d)
+		c++
+		print (c)
 
 
