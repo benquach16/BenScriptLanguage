@@ -318,6 +318,8 @@ void Lexer::GoThroughFunction()
 	int tabCount = numTabs(fileLines[currentLine])-1;	
 	while(fileLines[currentLine][tabCount] == '\t')
 	{
+		cerr << currentLine << endl;
+		cerr << fileLines[currentLine] << endl;
 		vector<string> tokens = TokenizeLine(fileLines[currentLine]);
 
 		//cerr << currentLine << endl;
@@ -366,7 +368,8 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 			//cout << tokens[i] << endl;
 		}
 		//cout << endl;
-		args.push_back(doLine(convertTokens));
+		if(convertTokens.size() > 0)
+			args.push_back(doLine(convertTokens));
 		convertTokens.clear();
 	}
 	for(int i = 1; i<commas.size(); i++)
@@ -378,7 +381,8 @@ Variable Lexer::SetupFunction(unsigned leftParens, vector<string> &tokens)
 			//cout << tokens[j] << endl;
 		}
 		//cout << endl;
-		args.push_back(doLine(convertTokens));
+		if(convertTokens.size()>0)
+			args.push_back(doLine(convertTokens));
 		convertTokens.clear();
 	}
 	return doFunction(tokens[leftParens-1], args);
@@ -865,12 +869,12 @@ Variable Lexer::doLine(vector<string> &tokens)
 			return variables[variables.size()-1];
 		}
     //check if its a function
-    if(tokens.size() > 3)
+    if(tokens.size() > 2)
     {
       //we assume function call
       if(tokens[1] == "(" && tokens[tokens.size()-1] == ")")
       {
-	//proper function call
+				//proper function call
     	  cout << "Found a function: " << tokens[0] << endl;
 				return SetupFunction(1, tokens);
 
@@ -878,8 +882,8 @@ Variable Lexer::doLine(vector<string> &tokens)
 
       else
       {
-	cerr << "Function call syntax error at line " << currentLine << endl;
-	exit(1);
+				cerr << "Function call syntax error at line " << currentLine << endl;
+				exit(1);
       }
     }
   }
@@ -890,6 +894,7 @@ Variable Lexer::doLine(vector<string> &tokens)
 	}
 	else
 	{
+		cerr << tokens.size() << endl;
 		cerr << "Function: DoLine. Syntax error on line: " << currentLine << endl;
 		exit(1);
 	}

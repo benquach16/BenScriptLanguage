@@ -1,0 +1,7 @@
+function foo()
+	print("helloworld")
+
+function main()
+	print("main")
+	foo()
+
