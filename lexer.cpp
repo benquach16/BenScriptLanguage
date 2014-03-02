@@ -24,19 +24,19 @@ Lexer::~Lexer()
 //email function
 int Lexer::sendMail(vector<string> &tokens)
 {
-    //for(int i = 0; i < 5; i++)
-        //cout << tokens[i] << endl;
-        
-    //tokens[3] = tokens[3].substr(1,tokens[3].find('"'));
-    //tokens[4] = tokens[4].substr(1,tokens[4].find('"'));
+     tokens[2] = tokens[2].substr(1,tokens[2].size()-2);
+    tokens[5] = tokens[5].substr(0,tokens[5].size()-1);
+    tokens[8] = tokens[8].substr(0,tokens[8].size()-1);
+    tokens[11] = tokens[11].substr(0,tokens[11].size()-1);
+
 	int retval = -1;
 	FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
 	if (mailpipe != NULL) 
 	{
-		fprintf(mailpipe, "To: %s\n", tokens[1].c_str());
-		fprintf(mailpipe, "From: %s\n", tokens[2].c_str());
-		fprintf(mailpipe, "Subject: %s\n\n", tokens[3].c_str());
-		fwrite(tokens[4].c_str(), 1, tokens[4].size(), mailpipe);
+		fprintf(mailpipe, "To: %s\n", tokens[2].c_str());
+		fprintf(mailpipe, "From: %s\n", tokens[5].c_str());
+		fprintf(mailpipe, "Subject: %s\n\n", tokens[8].c_str());
+		fwrite(tokens[11].c_str(), 1, tokens[11].size(), mailpipe);
 		fwrite(".\n", 1, 2, mailpipe);
 		pclose(mailpipe);
 		retval = 0;
